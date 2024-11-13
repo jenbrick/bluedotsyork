@@ -48,40 +48,42 @@ export default function Home() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <table className="styled-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Website</th>
-              <th>Category</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.length > 0 ? (
-              items.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>
-                    {item.website ? (
-                      <a href={item.website} target="_blank" rel="noopener noreferrer">
-                        {item.website}
-                      </a>
-                    ) : (
-                      'N/A'
-                    )}
-                  </td>
-                  <td>{item.category ?? 'N/A'}</td>
-                </tr>
-              ))
-            ) : (
+        <div className="styled-table-wrapper">
+          <table className="styled-table">
+            <thead>
               <tr>
-                <td colSpan={3} style={{ textAlign: 'center' }}>
-                  No items found
-                </td>
+                <th>Name</th>
+                <th>Website</th>
+                <th>Category</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.length > 0 ? (
+                items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>
+                      {item.website ? (
+                        <a href={item.website} target="_blank" rel="noopener noreferrer">
+                          {item.website}
+                        </a>
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
+                    <td>{item.category ?? 'N/A'}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} style={{ textAlign: 'center' }}>
+                    No items found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
