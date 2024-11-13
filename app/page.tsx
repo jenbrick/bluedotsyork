@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-export const dynamic = 'force-dynamic';
+
 export default function Home() {
   const [items, setItems] = useState<Array<{ id: string; name: string; website: string | null; category: string | null }>>([]);
   const [loading, setLoading] = useState<boolean>(false);
