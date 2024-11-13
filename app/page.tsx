@@ -19,7 +19,7 @@ export default function Home() {
         query = query.ilike('name', `%${searchTerm}%`);
       }
 
-      const { data, error } = await query.limit(10);
+      const { data, error } = await query.limit(100);
 
       if (error) {
         console.error('Error fetching data:', error.message);
