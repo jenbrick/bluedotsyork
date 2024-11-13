@@ -19,7 +19,7 @@ export default function Home() {
         query = query.ilike('name', `%${searchTerm}%`);
       }
 
-      const { data, error } = await query.limit(100);
+      const { data, error } = await query.limit(10);
 
       if (error) {
         console.error('Error fetching data:', error.message);
@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>Supabase Items List</h1>
+      <h1>Business Directory</h1>
 
       {/* Search Input */}
       <input
@@ -48,17 +48,40 @@ export default function Home() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul>
-          {items.length > 0 ? (
-            items.map((item) => (
-              <li key={item.id} className="item">
-                <strong>{item.name}</strong>: {item.website ?? 'No website available'} : {item.category}
-              </li>
-            ))
-          ) : (
-            <p>No items found</p>
-          )}
-        </ul>
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Website</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.length > 0 ? (
+              items.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>
+                    {item.website ? (
+                      <a href={item.website} target="_blank" rel="noopener noreferrer">
+                        {item.website}
+                      </a>
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td>{item.category ?? 'N/A'}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} style={{ textAlign: 'center' }}>
+                  No items found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       )}
     </div>
   );
