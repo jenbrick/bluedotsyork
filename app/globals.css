@@ -1,4 +1,10 @@
 /* app/globals.css */
+/* Ensure all elements respect the box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 /* Global styles */
 body {
@@ -8,6 +14,8 @@ body {
   padding: 20px;
   margin: 0;
 }
+
+
 
 /* Container styling */
 .container {
@@ -26,15 +34,17 @@ h1 {
   font-size: 1.5rem;
 }
 
-/* Search input styling */
 .search-input {
   width: 100%;
+  max-width: 100%;
   padding: 12px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
+  box-sizing: border-box; /* Ensures no overflow */
 }
+
 
 /* Styled table */
 .styled-table {
@@ -79,10 +89,41 @@ h1 {
     font-size: 0.9rem;
   }
 
-  .styled-table th,
+  .styled-table {
+    display: block;
+    width: 100%;
+  }
+
+  .styled-table thead {
+    display: none;
+  }
+
+  .styled-table tbody tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
   .styled-table td {
+    display: flex;
+    justify-content: space-between;
     padding: 8px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .styled-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    flex-basis: 40%;
+    color: #555;
+  }
+
+  /* Adjust link size for mobile */
+  a {
+    font-size: 0.85rem;
   }
 }
 
@@ -100,4 +141,6 @@ a:hover {
 td[colspan='3'] {
   font-style: italic;
   color: #999;
+  text-align: center;
+  padding: 20px;
 }
