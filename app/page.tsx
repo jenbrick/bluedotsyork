@@ -77,7 +77,8 @@ export default function Home() {
             <option value="website">Website</option>
             <option value="category">Category</option>
           </select>
-
+        </div>
+        <div className="search-controls">
           <input
             type="text"
             placeholder={`Search by ${searchFilter}...`}
