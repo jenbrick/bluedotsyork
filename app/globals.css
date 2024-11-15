@@ -1,9 +1,12 @@
 /* app/globals.css */
-/* Ensure all elements respect the box-sizing model */
+
+/* Reset and global box-sizing */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 /* Global styles */
@@ -12,19 +15,22 @@ body {
   background-color: #f5f5f5;
   color: #333;
   padding: 20px;
-  margin: 0;
 }
 
-
-
-/* Container styling */
+/* Main container styling */
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Content wrapper for consistent width */
+.content-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 /* Heading styling */
@@ -34,35 +40,32 @@ h1 {
   font-size: 1.5rem;
 }
 
+/* Search input */
 .search-input {
   width: 100%;
-  max-width: 100%;
   padding: 12px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  box-sizing: border-box; /* Ensures no overflow */
 }
-
 
 /* Styled table */
 .styled-table {
   width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
 
-/* Table header */
 .styled-table th {
   background-color: #4CAF50;
-  color: white;
+  color: #fff;
   text-align: left;
   padding: 10px;
-  font-size: 0.9rem;
 }
 
-/* Table rows */
 .styled-table td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
@@ -73,22 +76,48 @@ h1 {
   background-color: #f1f1f1;
 }
 
-/* Responsive table for mobile */
+/* Responsive table wrapper */
 .styled-table-wrapper {
   overflow-x: auto;
 }
 
-/* Mobile-friendly adjustments */
-@media (max-width: 600px) {
-  h1 {
-    font-size: 1.25rem;
+/* Icon styling */
+.icon-red {
+  color: #e74c3c;
+  font-size: 18px;
+}
+
+.icon-blue {
+  color: #3498db;
+  font-size: 18px;
+}
+
+.icon-grey {
+  color: #7f8c8d;
+  font-size: 18px;
+}
+
+/* Desktop layout (above 768px) */
+@media (min-width: 769px) {
+  .name-cell {
+    display: flex;
+    align-items: center;
   }
 
-  .search-input {
-    padding: 10px;
-    font-size: 0.9rem;
+  .icon-red,
+  .icon-blue,
+  .icon-grey {
+    margin-right: 8px;
+    order: 0; /* Icon on the left */
   }
 
+  .business-name {
+    margin-left: 8px;
+  }
+}
+
+/* Mobile layout (below 768px) */
+@media (max-width: 768px) {
   .styled-table {
     display: block;
     width: 100%;
@@ -99,48 +128,46 @@ h1 {
   }
 
   .styled-table tbody tr {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 12px;
+    padding: 16px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
   }
 
   .styled-table td {
     display: flex;
     justify-content: space-between;
-    padding: 8px;
-    font-size: 0.85rem;
+    align-items: center;
+    padding: 10px;
+    font-size: 0.9rem;
   }
 
   .styled-table td::before {
     content: attr(data-label);
     font-weight: bold;
-    flex-basis: 40%;
     color: #555;
+    flex-basis: 40%;
   }
 
-  /* Adjust link size for mobile */
-  a {
-    font-size: 0.85rem;
+  .name-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-}
 
-/* Link styling */
-a {
-  color: #007BFF;
-  text-decoration: none;
-}
+  .business-name {
+    margin-right: 8px;
+    flex-grow: 1;
+  }
 
-a:hover {
-  text-decoration: underline;
-}
-
-/* Centered text for empty state */
-td[colspan='3'] {
-  font-style: italic;
-  color: #999;
-  text-align: center;
-  padding: 20px;
+  .icon-red,
+  .icon-blue,
+  .icon-grey {
+    order: 1; /* Icon on the right */
+    margin-left: auto;
+  }
 }
