@@ -106,6 +106,16 @@ h1 {
   font-size: 18px;
 }
 
+.dropdowns-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-controls {
+  flex: 1;
+}
+
 .search-controls {
   display: flex;
   align-items: center;
@@ -125,12 +135,35 @@ h1 {
   font-size: 14px;
 }
 
+.category-filter-dropdown {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
 .search-input {
   flex: 1;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 14px;
+}
+
+/* Container for the dropdowns */
+.dropdowns-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Responsive layout for mobile screens */
+@media (max-width: 600px) {
+  .dropdowns-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 
@@ -196,6 +229,19 @@ h1 {
     margin-right: 8px;
     flex-grow: 1;
   }
+
+  /* Align the name text properly when it wraps */
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 0.5rem; /* Optional padding for better alignment */
+}
+
+.business-name {
+  word-break: break-word;
+  flex: 1;
+}
 
   .icon-red,
   .icon-blue,
