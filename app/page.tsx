@@ -79,7 +79,7 @@ export default function Home() {
                       <td data-label="Website">
                         {item.website ? (
                           <a href={item.website} target="_blank" rel="noopener noreferrer">
-                            Hello Mama
+                            {item.website}
                           </a>
                         ) : (
                           'N/A'
