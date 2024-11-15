@@ -81,6 +81,15 @@ h1 {
   overflow-x: auto;
 }
 
+/* Ensure text wraps within the website column */
+.styled-table td[data-label="Website"] a {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  display: inline-block;
+  max-width: 100%;
+}
+
 /* Icon styling */
 .icon-red {
   color: #e74c3c;
@@ -99,10 +108,6 @@ h1 {
 
 /* Desktop layout (above 768px) */
 @media (min-width: 769px) {
-  .name-cell {
-    display: flex;
-    align-items: center;
-  }
 
   .icon-red,
   .icon-blue,
@@ -171,3 +176,82 @@ h1 {
     margin-left: auto;
   }
 }
+
+/* Very small mobile layout (320px and below) */
+@media (max-width: 320px) {
+  /* Reduce body and container padding */
+  body {
+    padding: 5px;
+  }
+
+  .container {
+    padding: 5px;
+  }
+
+  /* Reduce the font size of the heading */
+  h1 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  /* Adjust search input for smaller width */
+  .search-input {
+    font-size: 0.75rem;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  /* Reduce padding and font size in the table rows */
+  .styled-table tbody tr {
+    padding: 8px;
+  }
+
+  .styled-table td {
+    padding: 6px;
+    font-size: 0.75rem;
+  }
+
+  /* Adjust the icon size for smaller screens */
+  .icon-red,
+  .icon-blue,
+  .icon-grey {
+    font-size: 14px;
+  }
+
+  /* Ensure the business name and icon fit well */
+  .business-name {
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+
+  /* Center the icon vertically and align it properly */
+  .name-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .icon-red,
+  .icon-blue,
+  .icon-grey {
+    margin-left: auto;
+    align-self: center;
+  }
+
+  /* Hide unnecessary borders for a cleaner look */
+  .styled-table td {
+    border-bottom: none;
+  }
+
+  /* Reduce the shadow and border radius for cards */
+  .styled-table tbody tr {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+
+  /* Adjust link size for smaller screens */
+  a {
+    font-size: 0.75rem;
+  }
+}
+
