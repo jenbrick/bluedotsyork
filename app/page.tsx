@@ -10,14 +10,28 @@ export default function Home() {
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchFilter, setSearchFilter] = useState<string>('all'); // New state for filter
 
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
+
+      // Initialize the query
       let query = supabase.from('proDemBusinesses').select('*').order('name', { ascending: true });
 
+      // Modify the query based on the search filter
       if (searchTerm.trim() !== '') {
-        query = query.ilike('name', `%${searchTerm}%`);
+        if (searchFilter === 'all') {
+          query = query.or(
+            `name.ilike.%${searchTerm}%,website.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%`
+          );
+        } else if (searchFilter === 'name') {
+          query = query.ilike('name', `%${searchTerm}%`);
+        } else if (searchFilter === 'website') {
+          query = query.ilike('website', `%${searchTerm}%`);
+        } else if (searchFilter === 'category') {
+          query = query.ilike('category', `%${searchTerm}%`);
+        }
       }
 
       const { data, error } = await query.limit(100);
@@ -30,7 +44,7 @@ export default function Home() {
     };
 
     fetchItems();
-  }, [searchTerm]);
+  }, [searchTerm, searchFilter]);
 
   // Function to get the icon based on the rank
   const getIcon = (rank: number | null) => {
@@ -48,13 +62,30 @@ export default function Home() {
       <h1>Business Directory</h1>
 
       <div className="content-wrapper">
-        <input
-          type="text"
-          placeholder="Search by name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
+        <div className="search-controls">
+          <label htmlFor="search-filter" className="search-label">
+            Search by:
+          </label>
+          <select
+            id="search-filter"
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
+            className="search-filter-dropdown"
+          >
+            <option value="all">All</option>
+            <option value="name">Name</option>
+            <option value="website">Website</option>
+            <option value="category">Category</option>
+          </select>
+
+          <input
+            type="text"
+            placeholder={`Search by ${searchFilter}...`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
 
         {loading ? (
           <p>Loading...</p>
