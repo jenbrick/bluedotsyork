@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault(); // Prevent the default form submission behavior
     setLoading(true);
     setError("");
-
+    
     try {
       // Send the access key to the server for validation
       const response = await fetch("/api/validate-key", {
@@ -25,15 +25,28 @@ export default function Login() {
         },
         body: JSON.stringify({ accessKey }),
       });
-
-      const data = await response.json();
-
-      if (data.valid) {
-        // Set the cookie with the access key (expires in 1 day)
-        Cookies.set("accessKey", accessKey, { expires: 1 });
-        router.push("/business-directory");
+  
+      // Log the raw response status and headers
+      console.log("Response Status:", response.status);
+      console.log("Response Headers:", response.headers);
+  
+      // Check if the response is JSON
+      const contentType = response.headers.get("Content-Type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await response.json();
+  
+        if (data.valid) {
+          // Set the cookie with the access key (expires in 1 day)
+          Cookies.set("accessKey", accessKey, { expires: 1 });
+          router.push("/business-directory");
+        } else {
+          setError("Invalid access key. Please try again.");
+        }
       } else {
-        setError("Invalid access key. Please try again.");
+        // Log and handle non-JSON response
+        const text = await response.text();
+        console.log("Non-JSON Response:", text);
+        setError("Unexpected response format. Please try again later." + text);
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -42,7 +55,7 @@ export default function Login() {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className={styles["login-page"]}>
       <div className={styles["login-container"]}>

@@ -6,10 +6,10 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const accessKeyCookie = request.cookies.get('accessKey')?.value;
-  const correctKey = process.env.NEXT_PUBLIC_ACCESS_KEY || 'bluedotsyork';
+  const correctKey = process.env.ACCESS_KEY || 'bluedotsyork';
 
   // Log the current pathname for debugging
-  console.log('Current pathname:', pathname);
+  console.debug('Current pathname:', pathname);
 
   // Skip middleware for the exact /login route and static files (_next)
   if (pathname === '/login' || pathname.startsWith('/_next')) {
@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Apply middleware to all routes except the /login page and static files (_next)
+// Apply middleware to all routes except the /login page, API routes, and static files (_next)
 export const config = {
-  matcher: ['/((?!login|_next|favicon.ico).*)'],
-};
+    matcher: ["/((?!login|api|_next|favicon.ico).*)"],
+  };
