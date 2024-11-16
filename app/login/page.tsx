@@ -11,7 +11,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent the default form submission behavior
     setLoading(true);
     setError("");
 
@@ -49,20 +50,23 @@ export default function Login() {
           <h1 className={styles["login-title"]}>Welcome to Blue Dots of York</h1>
           <p className={styles["login-subtitle"]}>Please enter the access key to continue</p>
 
-          <input
-            type="password"
-            placeholder="Access Key"
-            value={accessKey}
-            onChange={(e) => setAccessKey(e.target.value)}
-            className={styles["input-field"]}
-          />
-          <button
-            onClick={handleLogin}
-            className={styles["login-button"]}
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
+          {/* Form element to handle Enter key press */}
+          <form onSubmit={handleLogin}>
+            <input
+              type="password"
+              placeholder="Access Key"
+              value={accessKey}
+              onChange={(e) => setAccessKey(e.target.value)}
+              className={styles["input-field"]}
+            />
+            <button
+              type="submit"
+              className={styles["login-button"]}
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
 
           {error && <p className={styles["error-message"]}>{error}</p>}
         </div>
@@ -70,4 +74,3 @@ export default function Login() {
     </div>
   );
 }
-
