@@ -17,6 +17,18 @@ body {
   padding: 20px;
 }
 
+/* Full Page Background Gradient */
+body {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background-attachment: fixed; /* Ensures the background stays fixed when scrolling */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Arial', 'Helvetica Neue', sans-serif;
+  color: #333;
+}
+
 /* Main container styling */
 .container {
   max-width: 1200px;
@@ -177,9 +189,6 @@ h1 {
     order: 0; /* Icon on the left */
   }
 
-  .business-name {
-    margin-left: 8px;
-  }
 }
 
 /* Mobile layout (below 768px) */
@@ -229,19 +238,7 @@ h1 {
     margin-right: 8px;
     flex-grow: 1;
   }
-
-  /* Align the name text properly when it wraps */
-.name-cell {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-left: 0.5rem; /* Optional padding for better alignment */
-}
-
-.business-name {
-  word-break: break-word;
-  flex: 1;
-}
+  
 
   .icon-red,
   .icon-blue,
@@ -329,3 +326,108 @@ h1 {
   }
 }
 
+.info-banner {
+  position: relative;
+  width: 100%;
+  padding: 24px;
+  background-color: #f0f4ff;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.info-banner.expanded {
+  background-color: #e0e0e0;
+}
+
+.info-banner.expanded .info-banner-overlay{
+  background-color: #e0e0e0;
+  top:10%;
+}
+
+.info-banner-overlay {
+  position: relative;
+
+  font-size: .75em;
+  color: #007bff;
+  font-weight: bold;
+  pointer-events: none; /* Prevent overlay from blocking clicks */
+}
+
+.info-content {
+  padding: 16px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.info-banner:hover {
+  background-color: #e0e0e0;
+}
+
+/*.info-banner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  background-color: #f0f4ff;
+  cursor: pointer;
+  border: 1px solid #d1e0ff;
+}*/
+
+.info-banner-text {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.info-banner-text span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-content {
+  padding: 16px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.info-banner:hover {
+  background-color: #e0e0e0;
+}
+.info-toggle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  color: #007bff;
+}
+
+.info-content {
+  margin-top: 8px;
+  font-size: 0.9em;
+}
+
+.icon-blue {
+  color: #007bff;
+}
+
+.icon-grey {
+  color: #6c757d;
+}
+
+.icon-red {
+  color: #dc3545;
+}
+
+.directory-title {
+  margin-top: 10px;
+  color: #0051ff; /* Replace with your preferred shade */
+}
