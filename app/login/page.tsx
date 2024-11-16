@@ -8,16 +8,37 @@ import styles from "./Login.module.css";
 export default function Login() {
   const [accessKey, setAccessKey] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
-    const correctKey = process.env.NEXT_PUBLIC_ACCESS_KEY || "bluedotsyork";
+  const handleLogin = async () => {
+    setLoading(true);
+    setError("");
 
-    if (accessKey === correctKey) {
-      Cookies.set("accessKey", accessKey, { expires: 1 });
-      router.push("/business-directory");
-    } else {
-      setError("Invalid access key. Please try again.");
+    try {
+      // Send the access key to the server for validation
+      const response = await fetch("/api/validate-key", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ accessKey }),
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        // Set the cookie with the access key (expires in 1 day)
+        Cookies.set("accessKey", accessKey, { expires: 1 });
+        router.push("/business-directory");
+      } else {
+        setError("Invalid access key. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,8 +56,12 @@ export default function Login() {
             onChange={(e) => setAccessKey(e.target.value)}
             className={styles["input-field"]}
           />
-          <button onClick={handleLogin} className={styles["login-button"]}>
-            Login
+          <button
+            onClick={handleLogin}
+            className={styles["login-button"]}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           {error && <p className={styles["error-message"]}>{error}</p>}
@@ -45,3 +70,4 @@ export default function Login() {
     </div>
   );
 }
+
