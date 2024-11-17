@@ -112,7 +112,36 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1 className="directory-title">Blue Dots York - Business Directory</h1>
+      {/* Info Banner */}
+      <div
+        className={`info-banner ${showInfoBanner ? 'expanded' : ''}`}
+        onClick={() => setShowInfoBanner(!showInfoBanner)}
+      >
+        <div className="info-banner-overlay">
+          <span>ℹ️ About This Directory</span>
+        </div>
+        {showInfoBanner && (
+          <div className="info-content">
+            <p>
+              Welcome to the <strong>Blue Dots York County - Business Directory</strong>. A growing directory that features a curated list of businesses known
+              to promote equality, uphold human rights, and foster inclusivity.
+            </p>
+            <ul>
+              <li><strong>Search:</strong> Use the search bar to find businesses by name, website, category, or subcategory.</li>
+              <li><strong>Filter:</strong> Use the dropdown menus to refine your search by specific categories and subcategories.</li>
+              <li><strong>Icons:</strong> Each business has an icon indicating recommended and verified:
+                <ul>
+                  <li><i className="fa-solid fa-circle icon-blue"></i>Member Recommended</li>
+                  <li><i className="fa-solid fa-circle-check icon-blue"></i>Member Recommended and Verified by Blue Dots of York County</li>
+                  
+                </ul>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <h1 className="directory-title">Blue Dots York County - Business Directory</h1>
 
       <div className="dropdowns-container">
         {/* Search By Dropdown */}
