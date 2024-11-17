@@ -458,3 +458,33 @@ h1 {
   font-weight: bold;
 }
 
+/* Ensure dropdowns stay within the container */
+.search-filter-dropdown,
+.category-filter-dropdown,
+.subcategory-filter-dropdown {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+/* Mobile styles (768px and below) */
+@media (max-width: 768px) {
+  /* Ensure dropdowns do not overflow on mobile screens */
+  .dropdowns-container {
+    max-width: 100%;
+    padding: 0 10px; /* Add padding for better spacing */
+  }
+
+  .search-filter-dropdown,
+  .category-filter-dropdown,
+  .subcategory-filter-dropdown {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+  }
+}
+
+
+
