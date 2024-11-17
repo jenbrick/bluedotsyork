@@ -154,6 +154,13 @@ h1 {
   font-size: 14px;
 }
 
+.subcategory-filter-dropdown {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
 .search-input {
   flex: 1;
   padding: 10px;
@@ -424,3 +431,30 @@ h1 {
   margin-top: 10px;
   color: #0051ff; /* Replace with your preferred shade */
 }
+
+/* Mobile styles (768px and below) */
+@media (max-width: 768px) {
+  /* Right-align table values */
+  .styled-table td {
+    text-align: right;
+  }
+
+  /* Left-align table headers */
+  .styled-table th {
+    text-align: left;
+  }
+
+  /* Adjust header labels in mobile view (if using responsive td::before labels) */
+  .styled-table td::before {
+    text-align: left;
+    flex-basis: 40%; /* Adjust width for better alignment */
+    font-weight: bold;
+    color: #555;
+  }
+}
+
+/* Make the "Name" column values bold at all sizes */
+.styled-table td[data-label="Name"] {
+  font-weight: bold;
+}
+
