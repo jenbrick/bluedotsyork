@@ -81,7 +81,8 @@ export default function Home() {
   {showInfoBanner && (
     <div className="info-content">
       <p>
-        Welcome to the <strong>Blue Dots York - Business Directory</strong>. This directory features businesses that prioritize democratic values and support social justice.
+        Welcome to the <strong>Blue Dots York - Business Directory</strong>. A growing directory that features a curated list of businesses known
+        to promote equality, uphold human rights, and foster inclusivity.
       </p>
       <ul>
         <li><strong>Search:</strong> Use the search bar to find businesses by name, website, or category.</li>
