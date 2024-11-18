@@ -1,7 +1,7 @@
-/* Login.module.css */
+/* auth.module.css */
 
 /* Full Page Background */
-.login-page {
+.auth-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,8 +9,8 @@
   background: linear-gradient(135deg, #1e3c72, #2a5298);
 }
 
-/* Centered Login Container */
-.login-container {
+/* Centered Auth Container */
+.auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,8 +19,8 @@
   padding: 20px;
 }
 
-/* Login Card Styles */
-.login-card {
+/* Auth Card Styles */
+.auth-card {
   background: #fff;
   padding: 40px;
   border-radius: 12px;
@@ -31,13 +31,13 @@
 }
 
 /* Title and Subtitle */
-.login-title {
+.auth-title {
   font-size: 1.8em;
   margin-bottom: 10px;
   color: #1e3c72;
 }
 
-.login-subtitle {
+.auth-subtitle {
   font-size: 1em;
   margin-bottom: 20px;
   color: #666;
@@ -59,23 +59,6 @@
   outline: none;
 }
 
-/* Login Button */
-.login-button {
-  width: 100%;
-  padding: 12px;
-  background: #1e3c72;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.login-button:hover {
-  background: #2a5298;
-}
-
 /* Error Message */
 .error-message {
   color: #e74c3c;
@@ -85,15 +68,15 @@
 
 /* Responsive Design */
 @media (max-width: 500px) {
-  .login-card {
+  .auth-card {
     padding: 20px;
   }
 
-  .login-title {
+  .auth-title {
     font-size: 1.5em;
   }
 
-  .login-subtitle {
+  .auth-subtitle {
     font-size: 0.9em;
   }
 }

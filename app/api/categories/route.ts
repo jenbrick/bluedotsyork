@@ -17,7 +17,7 @@ export async function GET() {
   try {
     // Fetch categories and subcategories
     const { data, error } = await supabase
-      .from('proDemBusinesses')
+      .from('blueDotsBizTable')
       .select('category, subcategory')
       .neq('category', null)
       .neq('subcategory', null);

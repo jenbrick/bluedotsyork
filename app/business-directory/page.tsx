@@ -17,7 +17,7 @@ export default function Home() {
     const [items, setItems] = useState<BusinessItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [searchFilter, setSearchFilter] = useState<string>('name');
+    const [searchFilter, setSearchFilter] = useState<string>('all');
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectedSubcategory, setSelectedSubcategory] = useState<string>('');
     const [categories, setCategories] = useState<string[]>([]);
@@ -117,6 +117,21 @@ export default function Home() {
         return <i className="fa-solid fa-circle icon-blue"></i>;
     };
 
+    // Helper function to determine the placeholder text based on the selected filter
+    const getPlaceholderText = (filter: string) => {
+        switch (filter) {
+            case 'name':
+                return 'Search by Name';
+            case 'category':
+                return 'Category';
+            case 'subcategory':
+                return 'Subcategory';
+            case 'all':
+            default:
+                return 'Search across Name, Category, and Subcategory';
+        }
+    };
+
     return (
         <div className="container">
             {/* Info Banner */}
@@ -163,7 +178,6 @@ export default function Home() {
                         className="search-filter-dropdown"
                     >
                         <option value="name">Name</option>
-                        <option value="website">Website</option>
                         <option value="category">Category</option>
                         <option value="subcategory">Subcategory</option>
                         <option value="all">All Fields</option>
@@ -212,7 +226,7 @@ export default function Home() {
             <div className="search-controls">
                 <input
                     type="text"
-                    placeholder={`Search by ${searchFilter}...`}
+                    placeholder={getPlaceholderText(searchFilter)}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
@@ -249,7 +263,14 @@ export default function Home() {
                                                     {item.name}
                                                 </a>
                                             ) : (
-                                                item.name
+                                                <a
+                                                    href="https://www.google.com"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: '#007bff', textDecoration: 'none', cursor: 'pointer' }}
+                                                >
+                                                    {item.name}
+                                                </a>
                                             )}
                                         </td>
                                         <td data-label="Website">
@@ -263,7 +284,21 @@ export default function Home() {
                                                     <i className="fa-solid fa-globe" style={{ color: '#007bff', cursor: 'pointer' }}></i>
                                                 </a>
                                             ) : (
-                                                'N/A'
+                                                <a
+                                                    href="https://www.google.com"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label="Search on Google"
+                                                >
+                                                    <i
+                                                        className="fa-solid fa-circle-info"
+                                                        style={{
+                                                            color: '#007bff',
+                                                            fontSize: '1.2rem',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                    ></i>
+                                                </a>
                                             )}
                                         </td>
                                         <td data-label="Category">{item.category ?? 'N/A'}</td>
