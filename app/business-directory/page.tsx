@@ -131,7 +131,7 @@ export default function Home() {
                     <div className="info-content">
                         <p>
                             Welcome to the <strong>Blue Dots York County - Business Directory</strong>. A growing directory that features a curated list of businesses known
-                            to promote equality, uphold human rights, and foster inclusivity.
+                            to promote equality, uphold human rights, foster inclusivity, and promote democracy.
                         </p>
                         <ul>
                             <li><strong>Search:</strong> Use the search bar to find businesses by name, website, category, or subcategory.</li>
