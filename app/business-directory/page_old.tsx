@@ -66,7 +66,7 @@ export default function Home() {
       }
 
       let query = supabase
-        .from('proDemBusinesses')
+        .from('blueDotsBizTable')
         .select('id, name, website, category, subcategory, status')
         .order('name', { ascending: true });
 

@@ -55,7 +55,7 @@ export default function Home() {
         setLoading(true);
 
         let query = supabase
-        .from('proDemBusinesses')
+        .from('blueDotsBizTable')
         .select('id, name, website, category, subcategory, status')
         .order('category', { ascending: true }) // Sort by category first
         .order('subcategory', { ascending: true }) // Then sort by subcategory
@@ -131,7 +131,7 @@ export default function Home() {
                     <div className="info-content">
                         <p>
                             Welcome to the <strong>Blue Dots York County - Business Directory</strong>. A growing directory that features a curated list of businesses known
-                            to promote equality, uphold human rights, foster inclusivity, and promote democracy.
+                            to be inclusive, equitable, and that uphold democracy and human rights.
                         </p>
                         <ul>
                             <li><strong>Search:</strong> Use the search bar to find businesses by name, website, category, or subcategory.</li>
@@ -139,7 +139,7 @@ export default function Home() {
                             <li><strong>Icons:</strong> Each business has an icon indicating recommended and verified:
                                 <ul>
                                     <li><i className="fa-solid fa-circle icon-blue"></i> Member Recommended</li>
-                                    <li><i className="fa-solid fa-circle-check icon-blue"></i> Member Recommended and Verified by Blue Dots of York County</li>
+                                    <li><i className="fa-solid fa-circle-check icon-blue"></i> Member Recommended + Verified by Blue Dots of York County</li>
 
                                 </ul>
                             </li>
