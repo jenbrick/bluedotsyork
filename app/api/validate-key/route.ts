@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const { accessKey } = await request.json();
-    const correctKey = process.env.ACCESS_KEY || "bluedotsyork";
+    const correctKey = process.env.ACCESS_KEY || "LNJsiCYBiLZwzjDYCg8FAk1IaS3IO9NT";
 
     if (accessKey === correctKey) {
       return NextResponse.json({ valid: true });

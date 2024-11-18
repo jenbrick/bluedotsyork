@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const accessKeyCookie = request.cookies.get('accessKey')?.value;
-  const correctKey = process.env.ACCESS_KEY || 'bluedotsyork';
+  const correctKey = process.env.ACCESS_KEY || 'LNJsiCYBiLZwzjDYCg8FAk1IaS3IO9NT';
 
   // Log the current pathname for debugging
   console.debug('Current pathname:', pathname);
@@ -30,5 +30,5 @@ export function middleware(request: NextRequest) {
 
 // Apply middleware to all routes except the /login page, API routes, and static files (_next)
 export const config = {
-    matcher: ["/((?!login|api|_next|favicon.ico).*)"],
+    matcher: ["/((?!login|register|api|_next|favicon.ico).*)"],
   };

@@ -65,14 +65,13 @@ h1 {
 /* Styled table */
 .styled-table {
   width: 100%;
-  max-width: 1000px;
   margin: 0 auto;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
 
 .styled-table th {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #fff;
   text-align: left;
   padding: 10px;
@@ -484,6 +483,18 @@ h1 {
     word-wrap: break-word;
     overflow-wrap: anywhere;
   }
+
+
+}
+
+.blue-dots-welcome {
+  color: #240fdd;
+}
+
+h2 {
+  font-size: 1em;
+  color: #333;
+  text-align: center;
 }
 
 
