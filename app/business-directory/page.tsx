@@ -55,9 +55,11 @@ export default function Home() {
         setLoading(true);
 
         let query = supabase
-            .from('proDemBusinesses')
-            .select('id, name, website, category, subcategory, status')
-            .order('name', { ascending: true });
+        .from('proDemBusinesses')
+        .select('id, name, website, category, subcategory, status')
+        .order('category', { ascending: true }) // Sort by category first
+        .order('subcategory', { ascending: true }) // Then sort by subcategory
+        .order('name', { ascending: true }); // Optionally, sort by name after
 
         if (searchTerm.trim() !== '') {
             if (searchFilter === 'all') {
