@@ -165,7 +165,7 @@ export default function Home() {
             >
                 <div className="info-banner-overlay">
                 <span>
-    ℹ️ About / Usage   ({showInfoBanner ? "🔼 Click/Tap to Collapse Banner" : "🔽 Click/Tap to Expand Banner"})
+    ℹ️ About / Usage  -  {showInfoBanner ? "🔼 Click or Tap to Collapse" : "🔽 Click or Tap to Expand"}
 </span>
                 </div>
                 {showInfoBanner && (
