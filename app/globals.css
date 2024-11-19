@@ -56,7 +56,7 @@ h1 {
 .search-input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 20px;
+
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
@@ -460,7 +460,8 @@ h1 {
 /* Ensure dropdowns stay within the container */
 .search-filter-dropdown,
 .category-filter-dropdown,
-.subcategory-filter-dropdown {
+.subcategory-filter-dropdown,
+.sort-filter-dropdown {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box; /* Include padding and border in the width calculation */
@@ -476,7 +477,8 @@ h1 {
 
   .search-filter-dropdown,
   .category-filter-dropdown,
-  .subcategory-filter-dropdown {
+  .subcategory-filter-dropdown,
+  .sort-filter-dropdown {
     width: 100%;
     max-width: 100%;
     white-space: normal;
@@ -497,5 +499,126 @@ h2 {
   text-align: center;
 }
 
+.disclaimer-banner {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 10px 20px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.disclaimer-banner a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+
+/* Mobile styles (768px and below) */
+@media (max-width: 768px) {
+  .dropdowns-container {
+    flex-direction: column; /* Ensure dropdowns stack vertically */
+    align-items: flex-start; /* Align dropdowns to the left */
+  }
+
+  .search-controls {
+    width: 100%; /* Ensure full width for dropdowns */
+    text-align: left; /* Left-align the dropdowns */
+  }
+
+  .search-filter-dropdown,
+  .category-filter-dropdown,
+  .subcategory-filter-dropdown,
+  .sort-filter-dropdown {
+    width: 100%; /* Full width for better usability on small screens */
+  }
+
+  .search-label {
+    text-align: left; /* Left-align labels */
+    margin-bottom: 5px; /* Add spacing between label and dropdown */
+    display: block; /* Make labels take a full line */
+  }
+}
+
+@media (max-width: 768px) {
+  .dropdowns-container {
+    flex-direction: column; /* Stack vertically */
+    align-items: flex-start;
+  }
+
+  #sort-option {
+    order: 1;
+  }
+  #category-filter {
+    order: 2; /* Category first */
+  }
+
+  #subcategory-filter {
+    order: 3; /* Subcategory second */
+  }
+
+  #search-filter {
+    order: 4; /* Search by dropdown last */
+  }
+}
+
+.search-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.styled-add-button {
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #e6f7ff, #99d6ff); /* Light blue to medium blue */
+  color: #003366; /* Darker blue text for contrast */
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  align-items: center;
+  gap: 8px;
+}
+
+.styled-add-button:hover {
+  background: linear-gradient(90deg, #cceeff, #66b3ff); /* Slightly darker blue gradient */
+}
+
+
+.styled-remove-button {
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #ffe6f2, #ff99c2); /* Light pink to medium pink */
+  color: #8a0036; /* Darker text for better contrast */
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  align-items: center;
+  gap: 8px;
+}
+
+.styled-remove-button:hover {
+  background: linear-gradient(90deg, #ffcce0, #ff6699); /* Slightly darker pink gradient */
+}
+
+
+@media (max-width: 768px) {
+  .business-actions {
+      flex-direction: column;
+  }
+}
 
 

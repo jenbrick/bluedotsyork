@@ -23,7 +23,10 @@ export default function Home() {
     const [categories, setCategories] = useState<string[]>([]);
     const [subcategories, setSubcategories] = useState<string[]>([]);
     const [categoryMap, setCategoryMap] = useState<Record<string, string[]>>({});
-    const [showInfoBanner, setShowInfoBanner] = useState<boolean>(false);
+    const [cache, setCache] = useState<Map<string, BusinessItem[]>>(new Map()); // Cache state
+    const [sortOption, setSortOption] = useState<string>('name'); // New state for sorting
+    const [showInfoBanner, setShowInfoBanner] = useState<boolean>(true); // Show banner by default
+    const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true); // Collapsible banner toggle
 
     // Fetch categories and subcategories from the API
     useEffect(() => {
@@ -50,16 +53,26 @@ export default function Home() {
         }
     }, [selectedCategory, categoryMap]);
 
-    // Fetch items based on search filters
+    // Generate cache key based on filters
+    const getCacheKey = () => {
+        return `${searchTerm}_${searchFilter}_${selectedCategory}_${selectedSubcategory}_${sortOption}`;
+    };
+
+    // Fetch items with caching
     const fetchItems = async () => {
+        const cacheKey = getCacheKey();
+
+        // Check cache first
+        if (cache.has(cacheKey)) {
+            setItems(cache.get(cacheKey)!);
+            return;
+        }
+
         setLoading(true);
 
         let query = supabase
-        .from('blueDotsBizTable')
-        .select('id, name, website, category, subcategory, status')
-        .order('category', { ascending: true }) // Sort by category first
-        .order('subcategory', { ascending: true }) // Then sort by subcategory
-        .order('name', { ascending: true }); // Optionally, sort by name after
+            .from('blueDotsBizTable')
+            .select('id, name, website, category, subcategory, status');
 
         if (searchTerm.trim() !== '') {
             if (searchFilter === 'all') {
@@ -79,31 +92,41 @@ export default function Home() {
             query = query.eq('subcategory', selectedSubcategory);
         }
 
+        // Add sorting based on the selected option
+        if (sortOption === 'name') {
+            query = query.order('name', { ascending: true });
+        } else if (sortOption === 'category') {
+            query = query
+                .order('category', { ascending: true }) // Primary sort by category
+                .order('subcategory', { ascending: true }); // Secondary sort by subcategory
+        }
+
         const { data, error } = await query.limit(100);
         if (error) {
             console.error('Error fetching data:', error.message);
         } else {
             setItems(data ?? []);
+            setCache((prevCache) => new Map(prevCache).set(cacheKey, data ?? [])); // Update cache
         }
         setLoading(false);
     };
 
     useEffect(() => {
         fetchItems();
-    }, [searchTerm, searchFilter, selectedCategory, selectedSubcategory]);
+    }, [searchTerm, searchFilter, selectedCategory, selectedSubcategory, sortOption]);
 
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleCategoryChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        setSelectedCategory(value);
-        setSelectedSubcategory('');
+
+        setSelectedCategory(value); // Update selected category
+        setSelectedSubcategory(''); // Reset subcategory
         setSubcategories([]); // Clear subcategories immediately
 
         if (value === '') {
-            // Fetch all items when "All Categories" is selected
-            fetchItems();
+            await fetchItems(); // Fetch all items when "All Categories" is selected
         } else {
-            // Update subcategories based on the selected category
-            setSubcategories(categoryMap[value] || []);
+            setSubcategories(categoryMap[value] || []); // Update subcategories based on the selected category
+            await fetchItems();
         }
     };
 
@@ -117,7 +140,6 @@ export default function Home() {
         return <i className="fa-solid fa-circle icon-blue"></i>;
     };
 
-    // Helper function to determine the placeholder text based on the selected filter
     const getPlaceholderText = (filter: string) => {
         switch (filter) {
             case 'name':
@@ -128,62 +150,79 @@ export default function Home() {
                 return 'Subcategory';
             case 'all':
             default:
-                return 'Search across Name, Category, and Subcategory';
+                return 'Search across Name, Category, or Subcategory';
         }
     };
 
     return (
         <div className="container">
+           
+
             {/* Info Banner */}
             <div
                 className={`info-banner ${showInfoBanner ? 'expanded' : ''}`}
                 onClick={() => setShowInfoBanner(!showInfoBanner)}
             >
                 <div className="info-banner-overlay">
-                    <span>ℹ️ About This Directory</span>
+                <span>
+    ℹ️ About / Usage   ({showInfoBanner ? "🔼 Click/Tap to Collapse Banner" : "🔽 Click/Tap to Expand Banner"})
+</span>
                 </div>
                 {showInfoBanner && (
                     <div className="info-content">
-                        <p>
-                            Welcome to the <strong>Blue Dots York County - Business Directory</strong>. A growing directory that features a curated list of businesses known
-                            to be inclusive, equitable, and that uphold democracy and human rights.
-                        </p>
+                         {/* Disclaimer Banner */}
+            <div className="disclaimer-banner" style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+                <p style={{ marginBottom: '20px', fontSize: '12px' }}>
+                    This directory is a user-recommended, evolving list based on shared values of inclusivity, equity, and democracy. It is not comprehensive, and exclusion does not imply disapproval.
+                    <br />
+                    <a href="/business-directory/disclaimer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+                        Read Full Disclaimer
+                    </a>
+                </p>
+                <button
+                    className="styled-add-button"
+                    onClick={() =>
+                        window.location.href = "/business-directory/request-form"
+                    }
+                >
+                    <i className="fa-solid fa-plus"></i> Add Business
+                </button>
+                <button
+                    className="styled-remove-button"
+                    onClick={() =>
+                        window.location.href = "/business-directory/remove"
+                    }
+                >
+                    <i className="fa-solid fa-trash"></i> Remove Business
+                </button>
+            </div>
                         <ul>
-                            <li><strong>Search:</strong> Use the search bar to find businesses by name, website, category, or subcategory.</li>
-                            <li><strong>Filter:</strong> Use the dropdown menus to refine your search by specific categories and subcategories.</li>
-                            <li><strong>Icons:</strong> Each business has an icon indicating recommended and verified:
-                                <ul>
-                                    <li><i className="fa-solid fa-circle icon-blue"></i> Member Recommended</li>
-                                    <li><i className="fa-solid fa-circle-check icon-blue"></i> Member Recommended + Verified by Blue Dots of York County</li>
-
-                                </ul>
-                            </li>
+                            <li><strong>Sort <i className="fa-solid fa-sort"></i>:</strong> Use the dropdown to sort businesses by name or category.</li>
+                            <li><strong>Filter <i className="fa-solid fa-filter"></i>:</strong> Use the dropdowns to filter by specific categories and subcategories.</li>
+                            <li><strong>Search <i className="fa-solid fa-search"></i>:</strong> Use the search bar to find businesses or organizations by name, category, or subcategory.</li>
                         </ul>
                     </div>
                 )}
             </div>
 
-            <h1 className="directory-title">Blue Dots York County - Business Directory</h1>
+            <h1 className="directory-title">Blue Dots York County - Business/Organization Directory</h1>
 
             <div className="dropdowns-container">
-                {/* Search By Dropdown */}
+                {/* Sorting Options */}
                 <div className="search-controls">
-                    <label htmlFor="search-filter" className="search-label">
-                        Search by
-                    </label>
                     <select
-                        id="search-filter"
-                        value={searchFilter}
-                        onChange={(e) => setSearchFilter(e.target.value)}
+                        id="sort-option"
+                        value={sortOption}
+                        onChange={(e) => setSortOption(e.target.value)}
                         className="search-filter-dropdown"
                     >
-                        <option value="name">Name</option>
-                        <option value="category">Category</option>
-                        <option value="subcategory">Subcategory</option>
-                        <option value="all">All Fields</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="category">Category/Subcategory</option>
                     </select>
+                    <label htmlFor="sort-option" className="search-label">
+                        <i className="fa-solid fa-sort"></i>
+                    </label>
                 </div>
-
                 {/* Filter by Category */}
                 <div className="search-controls">
 
@@ -221,9 +260,13 @@ export default function Home() {
                         <i className="fa-solid fa-filter"></i>
                     </label>
                 </div>
+
             </div>
 
             <div className="search-controls">
+                <label htmlFor="search-input">
+                    <i className="fa-solid fa-search"></i>
+                </label>
                 <input
                     type="text"
                     placeholder={getPlaceholderText(searchFilter)}
