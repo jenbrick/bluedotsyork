@@ -25,7 +25,7 @@ export default function Home() {
     const [categoryMap, setCategoryMap] = useState<Record<string, string[]>>({});
     const [cache, setCache] = useState<Map<string, BusinessItem[]>>(new Map()); // Cache state
     const [sortOption, setSortOption] = useState<string>('name'); // New state for sorting
-    const [showInfoBanner, setShowInfoBanner] = useState<boolean>(true); // Show banner by default
+    const [showInfoBanner, setShowInfoBanner] = useState<boolean>(false); // Show banner by default
     const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true); // Collapsible banner toggle
 
     // Fetch categories and subcategories from the API
@@ -158,7 +158,7 @@ export default function Home() {
         <div className="container">
            <div className="disclaimer-banner" style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
                 <p style={{ marginBottom: '20px', fontSize: '12px' }}>
-                    This directory is a user-recommended, evolving list based on shared values of inclusivity, equity, and democracy. It is not comprehensive, and exclusion does not imply disapproval.
+                    This directory is a user-recommended, evolving list based on shared values of inclusivity, equity, diversity, and democracy. It is not comprehensive, and exclusion from this list does not imply disapproval.
                     <br />
                     <a href="/business-directory/disclaimer" style={{ color: '#007bff', textDecoration: 'underline' }}>
                         Read Full Disclaimer

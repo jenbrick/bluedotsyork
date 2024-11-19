@@ -42,7 +42,7 @@ export default function Disclaimer() {
                 Disclaimer
             </h1>
             <p>
-                This directory is a user-recommended, evolving list reflecting the shared values of inclusivity, equity, and democracy.
+                This directory is a user-recommended, evolving list reflecting the shared values of inclusivity, equity, diversity, and democracy.
                 While the aim is to highlight organizations and businesses aligned with these principles, inclusion in this directory
                 does not signify endorsement or partnership with a specific political party.
             </p><br></br>
