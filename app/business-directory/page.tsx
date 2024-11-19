@@ -156,22 +156,7 @@ export default function Home() {
 
     return (
         <div className="container">
-           
-
-            {/* Info Banner */}
-            <div
-                className={`info-banner ${showInfoBanner ? 'expanded' : ''}`}
-                onClick={() => setShowInfoBanner(!showInfoBanner)}
-            >
-                <div className="info-banner-overlay">
-                <span>
-    ℹ️ About / Usage  -  {showInfoBanner ? "🔼 Click or Tap to Collapse" : "🔽 Click or Tap to Expand"}
-</span>
-                </div>
-                {showInfoBanner && (
-                    <div className="info-content">
-                         {/* Disclaimer Banner */}
-            <div className="disclaimer-banner" style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+           <div className="disclaimer-banner" style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
                 <p style={{ marginBottom: '20px', fontSize: '12px' }}>
                     This directory is a user-recommended, evolving list based on shared values of inclusivity, equity, and democracy. It is not comprehensive, and exclusion does not imply disapproval.
                     <br />
@@ -185,7 +170,7 @@ export default function Home() {
                         window.location.href = "/business-directory/request-form"
                     }
                 >
-                    <i className="fa-solid fa-plus"></i> Add Business
+                    <i className="fa-solid fa-plus"></i> Request Add
                 </button>
                 <button
                     className="styled-remove-button"
@@ -193,13 +178,34 @@ export default function Home() {
                         window.location.href = "/business-directory/remove"
                     }
                 >
-                    <i className="fa-solid fa-trash"></i> Remove Business
+                    <i className="fa-solid fa-trash"></i> Request Removal
                 </button>
             </div>
+
+            {/* Info Banner */}
+            <div
+                className={`info-banner ${showInfoBanner ? 'expanded' : ''}`}
+                onClick={() => setShowInfoBanner(!showInfoBanner)}
+            >
+                <div className="info-banner-overlay">
+                <span>
+                    ℹ️ About / Usage -  {showInfoBanner ? "🔼 Click or Tap to Collapse" : "🔽 Click or Tap to Expand"}
+                </span>
+                </div>
+                {showInfoBanner && (
+                    <div className="info-content">
+                         {/* Disclaimer Banner */}
                         <ul>
                             <li><strong>Sort <i className="fa-solid fa-sort"></i>:</strong> Use the dropdown to sort businesses by name or category.</li>
                             <li><strong>Filter <i className="fa-solid fa-filter"></i>:</strong> Use the dropdowns to filter by specific categories and subcategories.</li>
                             <li><strong>Search <i className="fa-solid fa-search"></i>:</strong> Use the search bar to find businesses or organizations by name, category, or subcategory.</li>
+                            <li><strong>Icons:</strong> Each business has an icon indicating recommended and verified:
+                                <ul>
+                                    <li><i className="fa-solid fa-circle icon-blue"></i> Member Recommended</li>
+                                    <li><i className="fa-solid fa-circle-check icon-blue"></i> Member Recommended + Verified by Blue Dots of York County</li>
+
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 )}

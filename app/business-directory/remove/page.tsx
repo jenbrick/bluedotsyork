@@ -10,13 +10,28 @@ export default function BusinessActions() {
                 alignItems: "center",
                 gap: "20px",
                 padding: "20px",
-                backgroundColor: "rgba(236, 244, 254)'",
+                backgroundColor: "rgba(236, 244, 254)",
                 borderRadius: "8px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 maxWidth: "640px", // Limits the container width
                 margin: "20px auto", // Centers the container
             }}
         >
+            {/* Back to Business Directory Link */}
+            <a
+                href="/business-directory"
+                style={{
+                    alignSelf: "flex-start",
+                    marginBottom: "20px",
+                    color: "#007bff",
+                    textDecoration: "underline",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                }}
+            >
+                ← Back to Business Directory
+            </a>
+
             {/* Remove Business Card */}
             <div
                 style={{

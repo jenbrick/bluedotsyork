@@ -576,18 +576,20 @@ h2 {
 }
 
 .styled-add-button {
-  padding: 10px 20px;
+  padding: 5px 10px;
   background: linear-gradient(90deg, #e6f7ff, #99d6ff); /* Light blue to medium blue */
   color: #003366; /* Darker blue text for contrast */
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: background 0.3s ease, box-shadow 0.3s ease;
   align-items: center;
   gap: 8px;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .styled-add-button:hover {
@@ -596,12 +598,12 @@ h2 {
 
 
 .styled-remove-button {
-  padding: 10px 20px;
+  padding: 5px 10px;
   background: linear-gradient(90deg, #ffe6f2, #ff99c2); /* Light pink to medium pink */
   color: #8a0036; /* Darker text for better contrast */
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
