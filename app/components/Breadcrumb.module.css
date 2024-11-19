@@ -1,0 +1,75 @@
+/* File: app/components/Breadcrumb.module.css */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    overflow-x: auto; /* Enable horizontal scroll for long breadcrumbs */
+    white-space: nowrap; /* Prevent line wrapping */
+  }
+  
+  .breadcrumb ul {
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto; /* Allow scrolling for mobile if too wide */
+  }
+  
+  .breadcrumb li {
+    display: flex;
+    align-items: center;
+  }
+  
+  .breadcrumb li span.separator {
+    margin: 0 0.5rem;
+    color: gray;
+    padding-right: 0.5rem;
+  }
+
+  /* File: Breadcrumb.module.css */
+.breadcrumb ul {
+  list-style: none; /* Removes bullets */
+  display: flex; /* Align items horizontally */
+  padding: 0;
+  margin: 0;
+  gap: 0.5rem; /* Adds spacing between items */
+}
+
+.breadcrumb li {
+  display: flex; /* Ensures inline alignment of items */
+  align-items: center;
+}
+
+.breadcrumb li span.separator {
+  margin: 0 0.25rem; /* Adds spacing around the separator */
+  color: gray;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: blue;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+  
+  /* Mobile-specific styles */
+  @media (max-width: 768px) {
+    .breadcrumb {
+      font-size: 0.75rem; /* Reduce font size for smaller screens */
+      gap: 0.25rem; /* Reduce spacing */
+    }
+  
+    .breadcrumb ul {
+      gap: 0.25rem; /* Less gap between items */
+    }
+  
+    .breadcrumb li span.separator {
+      margin: 0 0.25rem; /* Smaller separator margin */
+    }
+  }
+  

@@ -1,5 +1,7 @@
 "use client";
 
+import Breadcrumb from '../../components/Breadcrumb'; // Adjust the path as necessary
+
 export default function BusinessActions() {
     return (
         <div
@@ -17,20 +19,15 @@ export default function BusinessActions() {
                 margin: "20px auto", // Centers the container
             }}
         >
-            {/* Back to Business Directory Link */}
-            <a
-                href="/business-directory"
+            {/* Breadcrumb aligned to the left */}
+            <div
                 style={{
-                    alignSelf: "flex-start",
-                    marginBottom: "20px",
-                    color: "#007bff",
-                    textDecoration: "underline",
-                    fontSize: "14px",
-                    fontWeight: "bold",
+                    width: "100%", // Makes the container full-width
+                    textAlign: "left", // Aligns breadcrumb content to the left
                 }}
             >
-                ← Back to Business Directory
-            </a>
+                <Breadcrumb />
+            </div>
 
             {/* Remove Business Card */}
             <div

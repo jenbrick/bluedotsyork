@@ -1,7 +1,11 @@
 "use client";
 
+import Breadcrumb from '../../components/Breadcrumb'; // Adjust the path as necessary
+
 export default function Disclaimer() {
     return (
+
+    
         <div
             style={{
                 maxWidth: "800px",
@@ -15,21 +19,9 @@ export default function Disclaimer() {
                 lineHeight: "1.6",
             }}
         >
-            {/* Back to Business Directory Link */}
-            <a
-                href="/business-directory"
-                style={{
-                    display: "block",
-                    marginBottom: "20px",
-                    color: "#007bff",
-                    textDecoration: "underline",
-                    fontWeight: "bold",
-                    fontSize: "14px",
-                }}
-            >
-                ← Back to Business Directory
-            </a>
-
+            {/* Add Breadcrumb */}
+            <Breadcrumb />
+          
             {/* Disclaimer Content */}
             <h1
                 style={{

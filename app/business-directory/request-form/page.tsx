@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from 'react';
+import Breadcrumb from '../../components/Breadcrumb'; // Adjust the path as necessary
 
 export default function GoogleForm() {
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -39,21 +40,9 @@ export default function GoogleForm() {
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             }}
         >
-            {/* Back to Directory Link */}
-            <div style={{ textAlign: 'left', marginBottom: '20px' }}>
-                <a
-                    href="/business-directory"
-                    style={{
-                        color: '#007bff',
-                        textDecoration: 'underline',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    ← Back to Business Directory
-                </a>
-            </div>
-
+            {/* Add Breadcrumb */}
+            <Breadcrumb />
+            <br></br>
             <h1 style={{ marginBottom: '20px', fontSize: '24px', color: '#333' }}>Submit Your Details</h1>
             <iframe
                 ref={iframeRef}

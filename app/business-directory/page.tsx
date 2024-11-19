@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Breadcrumb from '../components/Breadcrumb'; // Adjust the path as necessary
 
 interface BusinessItem {
     id: string;
@@ -156,6 +157,8 @@ export default function Home() {
 
     return (
         <div className="container">
+            {/* Add Breadcrumb */}
+            <Breadcrumb />
            <div className="disclaimer-banner" style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
                 <p style={{ marginBottom: '20px', fontSize: '12px' }}>
                     This directory is a user-recommended, evolving list based on shared values of inclusivity, equity, diversity, and democracy. It is not comprehensive, and exclusion from this list does not imply disapproval.
