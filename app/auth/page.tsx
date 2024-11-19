@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import styles from "./auth.module.css";
 
-export default function Auth() {
+function AuthInner() {
   const [accessKey, setAccessKey] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,11 +64,21 @@ export default function Auth() {
       <div className={styles["auth-container"]}>
         <div className={styles["auth-card"]}>
           <h1 className={styles["auth-title"]}>Welcome to Blue Dots of York</h1>
-          <p className={styles["auth-subtitle"]}>Authorizing...</p>
+          <p className={styles["auth-subtitle"]}>
+            {loading ? "Authorizing..." : "Redirecting"}
+          </p>
 
           {error && <p className={styles["error-message"]}>{error}</p>}
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Auth() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthInner />
+    </Suspense>
   );
 }
