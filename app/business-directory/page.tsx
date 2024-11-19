@@ -170,7 +170,7 @@ export default function Home() {
                         window.location.href = "/business-directory/request-form"
                     }
                 >
-                    <i className="fa-solid fa-plus"></i> Request Add
+                    <i className="fa-solid fa-plus"></i> Request Addition
                 </button>
                 <button
                     className="styled-remove-button"
@@ -202,7 +202,7 @@ export default function Home() {
                             <li><strong>Icons:</strong> Each business has an icon indicating recommended and verified:
                                 <ul>
                                     <li><i className="fa-solid fa-circle icon-blue"></i> Member Recommended</li>
-                                    <li><i className="fa-solid fa-circle-check icon-blue"></i> Member Recommended + Verified by Blue Dots of York County</li>
+                                    <li><i className="fa-solid fa-circle-check icon-blue"></i> Member Recommended + Owner Verified</li>
 
                                 </ul>
                             </li>
