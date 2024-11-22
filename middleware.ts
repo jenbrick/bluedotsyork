@@ -18,17 +18,24 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // If a token is present in the query string, pass it along to the auth page
-  if (rtkn) {
-    console.log('Redirecting to /auth.');
-    const authUrl = new URL('/auth', request.url);
-    authUrl.searchParams.set('rtkn', rtkn);
-    return NextResponse.redirect(authUrl);
-  }
+
 
   // If the access key cookie is missing or incorrect, redirect to /auth with preserved token
-  if (!accessKeyCookie || accessKeyCookie !== correctKey) {
-    console.log('Redirecting to /auth due to missing or incorrect access key');
+  if (!accessKeyCookie) {
+      // If a token is present in the query string, pass it along to the auth page
+    if (rtkn) {
+      console.log('Redirecting to /auth.');
+      const authUrl = new URL('/auth', request.url);
+      authUrl.searchParams.set('rtkn', rtkn);
+      return NextResponse.redirect(authUrl);
+    } else {
+      console.log('Redirecting to missing access key');
+      const authUrl = new URL('/auth', request.url);
+      return NextResponse.redirect(authUrl);
+    }
+
+  } else if (accessKeyCookie !== correctKey) {
+    console.log('Redirecting to incorrect access key');
     const authUrl = new URL('/auth', request.url);
 
     // Preserve the token if it exists in the original query string
@@ -37,11 +44,12 @@ export function middleware(request: NextRequest) {
     }
 
     return NextResponse.redirect(authUrl);
+  } else {
+  
+    // Allow the request to proceed
+    console.log('Access granted');
+    return NextResponse.next();
   }
-
-  // Allow the request to proceed
-  console.log('Access granted');
-  return NextResponse.next();
 }
 
 // Apply middleware to all routes except /auth, API routes, and static files (_next)

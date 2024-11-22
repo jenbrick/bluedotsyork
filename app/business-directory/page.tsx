@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Breadcrumb from '../components/Breadcrumb'; // Adjust the path as necessary
+import Cookies from "js-cookie"; // Import js-cookie for cookie handling
+import { useRouter } from "next/navigation"; // Use Next.js router for URL manipulation
 
 interface BusinessItem {
     id: string;
@@ -12,6 +14,7 @@ interface BusinessItem {
     category: string | null;
     subcategory: string | null;
     status: number | null;
+    keywords: string | null;
 }
 
 export default function Home() {
@@ -24,12 +27,23 @@ export default function Home() {
     const [categories, setCategories] = useState<string[]>([]);
     const [subcategories, setSubcategories] = useState<string[]>([]);
     const [categoryMap, setCategoryMap] = useState<Record<string, string[]>>({});
-    const [cache, setCache] = useState<Map<string, BusinessItem[]>>(new Map()); // Cache state
     const [sortOption, setSortOption] = useState<string>('name'); // New state for sorting
     const [showInfoBanner, setShowInfoBanner] = useState<boolean>(false); // Show banner by default
-    const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true); // Collapsible banner toggle
+    const router = useRouter();
 
-    // Fetch categories and subcategories from the API
+    useEffect(() => {
+        const rtkn = Cookies.get("accessKey");
+
+        if (rtkn) {
+            const currentUrl = new URL(window.location.href);
+
+            if (!currentUrl.searchParams.get("rtkn")) {
+                currentUrl.searchParams.set("rtkn", rtkn);
+                router.replace(currentUrl.toString());
+            }
+        }
+    }, [router]);
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -45,7 +59,6 @@ export default function Home() {
         fetchCategories();
     }, []);
 
-    // Update subcategories when selectedCategory changes
     useEffect(() => {
         if (selectedCategory && categoryMap[selectedCategory]) {
             setSubcategories(categoryMap[selectedCategory]);
@@ -54,31 +67,17 @@ export default function Home() {
         }
     }, [selectedCategory, categoryMap]);
 
-    // Generate cache key based on filters
-    const getCacheKey = () => {
-        return `${searchTerm}_${searchFilter}_${selectedCategory}_${selectedSubcategory}_${sortOption}`;
-    };
-
-    // Fetch items with caching
     const fetchItems = async () => {
-        const cacheKey = getCacheKey();
-
-        // Check cache first
-        if (cache.has(cacheKey)) {
-            setItems(cache.get(cacheKey)!);
-            return;
-        }
-
         setLoading(true);
 
         let query = supabase
             .from('blueDotsBizTable')
-            .select('id, name, website, category, subcategory, status');
+            .select('id, name, website, category, subcategory, status, keywords');
 
         if (searchTerm.trim() !== '') {
             if (searchFilter === 'all') {
                 query = query.or(
-                    `name.ilike.%${searchTerm}%,website.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%,subcategory.ilike.%${searchTerm}%`
+                    `name.ilike.%${searchTerm}%,website.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%,subcategory.ilike.%${searchTerm}%,keywords.ilike.%${searchTerm}%`
                 );
             } else {
                 query = query.ilike(searchFilter, `%${searchTerm}%`);
@@ -93,21 +92,20 @@ export default function Home() {
             query = query.eq('subcategory', selectedSubcategory);
         }
 
-        // Add sorting based on the selected option
         if (sortOption === 'name') {
             query = query.order('name', { ascending: true });
         } else if (sortOption === 'category') {
             query = query
-                .order('category', { ascending: true }) // Primary sort by category
-                .order('subcategory', { ascending: true }); // Secondary sort by subcategory
+                .order('category', { ascending: true })
+                .order('subcategory', { ascending: true });
         }
 
-        const { data, error } = await query.limit(100);
+        console.log("fetching data");
+        const { data, error } = await query.limit(500);
         if (error) {
             console.error('Error fetching data:', error.message);
         } else {
             setItems(data ?? []);
-            setCache((prevCache) => new Map(prevCache).set(cacheKey, data ?? [])); // Update cache
         }
         setLoading(false);
     };
@@ -119,14 +117,14 @@ export default function Home() {
     const handleCategoryChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
 
-        setSelectedCategory(value); // Update selected category
-        setSelectedSubcategory(''); // Reset subcategory
-        setSubcategories([]); // Clear subcategories immediately
+        setSelectedCategory(value);
+        setSelectedSubcategory('');
+        setSubcategories([]);
 
         if (value === '') {
-            await fetchItems(); // Fetch all items when "All Categories" is selected
+            await fetchItems();
         } else {
-            setSubcategories(categoryMap[value] || []); // Update subcategories based on the selected category
+            setSubcategories(categoryMap[value] || []);
             await fetchItems();
         }
     };
@@ -145,16 +143,18 @@ export default function Home() {
         switch (filter) {
             case 'name':
                 return 'Search by Name';
+            case 'keywords':
+                return 'Search by Keyword';
             case 'category':
                 return 'Category';
             case 'subcategory':
                 return 'Subcategory';
             case 'all':
             default:
-                return 'Search across Name, Category, or Subcategory';
+                return 'Search across Name, Keyword, Category, Subcategory';
         }
     };
-
+    
     return (
         <div className="container">
             {/* Add Breadcrumb */}
@@ -201,7 +201,7 @@ export default function Home() {
                         <ul>
                             <li><strong>Sort <i className="fa-solid fa-sort"></i>:</strong> Use the dropdown to sort businesses by name or category.</li>
                             <li><strong>Filter <i className="fa-solid fa-filter"></i>:</strong> Use the dropdowns to filter by specific categories and subcategories.</li>
-                            <li><strong>Search <i className="fa-solid fa-search"></i>:</strong> Use the search bar to find businesses or organizations by name, category, or subcategory.</li>
+                            <li><strong>Search <i className="fa-solid fa-search"></i>:</strong> Use the search bar to find businesses or organizations by name, keyword, category, or subcategory.</li>
                             <li><strong>Icons:</strong> Each business has an icon indicating recommended and verified:
                                 <ul>
                                     <li><i className="fa-solid fa-circle icon-blue"></i> Member Recommended</li>
@@ -284,7 +284,9 @@ export default function Home() {
                     className="search-input"
                 />
             </div>
-
+            <div className="click-biz">
+                <p>*Click on business name to go to website</p>
+            </div>         
             {loading ? (
                 <p>Loading...</p>
             ) : (
@@ -293,10 +295,10 @@ export default function Home() {
                         <thead> 
                             <tr>
                                 <th>Status</th>
-                                <th>Name</th>
-                                <th>Website</th>
+                                <th>Name*</th>
                                 <th>Category</th>
                                 <th>Subcategory</th>
+                                <th>Keywords</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -325,36 +327,9 @@ export default function Home() {
                                                 </a>
                                             )}
                                         </td>
-                                        <td data-label="Website">
-                                            {item.website ? (
-                                                <a
-                                                    href={item.website.startsWith('http') ? item.website : `https://${item.website}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    aria-label="Visit Website"
-                                                >
-                                                    <i className="fa-solid fa-globe" style={{ color: '#007bff', cursor: 'pointer' }}></i>
-                                                </a>
-                                            ) : (
-                                                <a
-                                                    href="https://www.google.com"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    aria-label="Search on Google"
-                                                >
-                                                    <i
-                                                        className="fa-solid fa-circle-info"
-                                                        style={{
-                                                            color: '#007bff',
-                                                            fontSize: '1.2rem',
-                                                            cursor: 'pointer',
-                                                        }}
-                                                    ></i>
-                                                </a>
-                                            )}
-                                        </td>
                                         <td data-label="Category">{item.category ?? 'N/A'}</td>
                                         <td data-label="Subcategory">{item.subcategory ?? 'N/A'}</td>
+                                        <td data-label="Keywords">{item.keywords ?? ''}</td>
                                     </tr>
                                 ))
                             ) : (
