@@ -1,75 +1,77 @@
 /* File: app/components/Breadcrumb.module.css */
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    overflow-x: auto; /* Enable horizontal scroll for long breadcrumbs */
-    white-space: nowrap; /* Prevent line wrapping */
-  }
-  
-  .breadcrumb ul {
-    list-style: none;
-    display: flex;
-    gap: 0.5rem;
-    padding: 0;
-    margin: 0;
-    overflow-x: auto; /* Allow scrolling for mobile if too wide */
-  }
-  
-  .breadcrumb li {
-    display: flex;
-    align-items: center;
-  }
-  
-  .breadcrumb li span.separator {
-    margin: 0 0.5rem;
-    color: gray;
-    padding-right: 0.5rem;
-  }
 
-  /* File: Breadcrumb.module.css */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef); /* Subtle gradient */
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+}
+
 .breadcrumb ul {
-  list-style: none; /* Removes bullets */
-  display: flex; /* Align items horizontally */
+  display: flex;
+  list-style: none;
   padding: 0;
   margin: 0;
-  gap: 0.5rem; /* Adds spacing between items */
+  gap: 0.5rem;
 }
 
 .breadcrumb li {
-  display: flex; /* Ensures inline alignment of items */
+  display: flex;
   align-items: center;
+  font-weight: 500;
 }
 
+/* Chevron Separator */
 .breadcrumb li span.separator {
-  margin: 0 0.25rem; /* Adds spacing around the separator */
-  color: gray;
+  margin: 0 0.5rem;
+  color: #6c757d;
+  font-size: 0.9rem;
 }
 
+/* Link Styling */
 .breadcrumb a {
   text-decoration: none;
-  color: blue;
+  color: #007bff;
+  position: relative;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Underline Animation on Hover */
+.breadcrumb a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #007bff;
+  transition: width 0.3s ease-in-out;
 }
 
 .breadcrumb a:hover {
-  text-decoration: underline;
+  color: #0056b3;
 }
 
-  
-  /* Mobile-specific styles */
-  @media (max-width: 768px) {
-    .breadcrumb {
-      font-size: 0.75rem; /* Reduce font size for smaller screens */
-      gap: 0.25rem; /* Reduce spacing */
-    }
-  
-    .breadcrumb ul {
-      gap: 0.25rem; /* Less gap between items */
-    }
-  
-    .breadcrumb li span.separator {
-      margin: 0 0.25rem; /* Smaller separator margin */
-    }
+.breadcrumb a:hover::after {
+  width: 100%;
+}
+
+/* Active Page (Last Item) */
+.breadcrumb li span:last-child {
+  color: #495057;
+  font-weight: bold;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .breadcrumb {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
-  
+
+  .breadcrumb li span.separator {
+    margin: 0 0.3rem;
+  }
+}
