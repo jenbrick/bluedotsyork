@@ -54,7 +54,7 @@ body {
   color: inherit;
 }
 
-/* Default Desktop View - Image Above Text */
+/* Desktop: Image is ABOVE the text */
 .card-link .hybrid-card {
   background: white;
   padding: 16px;
@@ -109,7 +109,7 @@ body {
   text-align: center;
 }
 
-/* Mobile: Move Image to the Right */
+/* 📱 Mobile: Move Image to the Right 📱 */
 @media (max-width: 768px) {
   .card-container {
     grid-template-columns: 1fr;
@@ -123,14 +123,18 @@ body {
     padding: 12px;
   }
 
+  /* Ensure the text container takes remaining space */
+  .card-content {
+    flex: 1;
+    padding-right: 10px; /* Add some spacing */
+  }
+
+  /* Move image to the right side */
   .card-image-container {
     width: 120px; /* Set a fixed width for mobile */
     height: 100px;
+    flex-shrink: 0; /* Prevents image from shrinking */
     margin-left: 12px; /* Add spacing between text and image */
-  }
-
-  .card-content {
-    flex: 1; /* Allow text to take up remaining space */
   }
 
   .hybrid-card h3 {

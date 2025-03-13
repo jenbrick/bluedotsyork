@@ -20,8 +20,6 @@ const ClickableCard = ({ title, description, link, image }: { title: string; des
 const HomePage: React.FC = () => {
   return (
     <div className="container">
-
-
       {/* Welcome Section */}
       <div className="welcome-section">
         <h1>Welcome to Blue Dots of York County</h1>
@@ -35,10 +33,10 @@ const HomePage: React.FC = () => {
       <div className="card-container">
         <ClickableCard title="Events" description="Stay informed about upcoming community events and gatherings." link="/events" image="/images/upcoming-events.jpg" />
         <ClickableCard title="School Board Information" description="Learn about school board members, policies, and upcoming meetings." link="/school-board" image="/images/school-board.jpg" />
-        <ClickableCard title="Elections & Voting Info" description="Get the latest details on local elections, candidates, and voting procedures." link="/elections" image="/images/voting.jpg" />
-        <ClickableCard title="Placeholder 1" description="More content coming soon." link="#" image="/images/placeholder1.jpg" />
-        <ClickableCard title="Placeholder 2" description="More content coming soon." link="#" image="/images/placeholder2.jpg" />
-        <ClickableCard title="Placeholder 3" description="More content coming soon." link="#" image="/images/placeholder3.jpg" />
+        <ClickableCard title="Elections & Voting Info" description="Get the latest details on local elections, candidates, and voting procedures." link="/elections-and-voting" image="/images/voting.jpg" />
+        <ClickableCard title="Authoritarianism Alerts" description="Track threats to democracy with research, analysis, and real-time updates on authoritarian trends." link="/alerts" image="/images/authoritarianism-alerts.png" />
+        <ClickableCard title="Learning" description="Empower yourself with knowledge. Explore resources on power, strategy, and influence to understand rising authoritarianism and how to counter it." link="/learn" image="/images/knowledge-base.jpg" />
+        <ClickableCard title="Take Action" description="Turn knowledge into action. Find ways to resist authoritarianism, support democracy, and make an impact in your community." link="#" image="/images/resist.jpg" />
       </div>
     </div>
   );
