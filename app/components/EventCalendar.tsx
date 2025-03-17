@@ -127,9 +127,9 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             headerToolbar={{
-              left: "prev,next today",
+              left: "prev",
               center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
+              right: "next"
             }}
             dayCellClassNames={(info) => {
               const formattedDate = info.date.toISOString().split("T")[0]; // ✅ Convert to YYYY-MM-DD
