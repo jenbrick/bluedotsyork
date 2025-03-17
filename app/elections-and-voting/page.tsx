@@ -25,7 +25,7 @@ export default function ElectionsPage() {
               {[
                 {
                 name: "York County Directory of Public Officials (2025)",
-                url: "https://yorkcountypa.gov/503/Elections-Voter-Registration",
+                url: "https://www.ycpc.org/DocumentCenter/View/5089/2025-Directory-of-Public-Officials-PDF",
                 description: "A comprehensive resource detailing contact information for elected and appointed officials across the county. This directory encompasses officials from various levels of government, including federal, state, county, and municipal positions.",
                 },
                 {
