@@ -274,6 +274,49 @@
   border-bottom: none;
 }
 
+/* ✅ Toggle View Button Styling */
+.toggle-view-button {
+  background-color: #007bff; /* Blue */
+  color: white;
+  font-weight: bold;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background 0.2s ease-in-out;
+}
+
+.toggle-view-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.toggle-view-button:active {
+  transform: scale(0.98);
+}
+
+/* ✅ Print Button Styling */
+.print-button {
+  background-color: #28a745; /* Green */
+  color: white;
+  font-weight: bold;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background 0.2s ease-in-out;
+}
+
+.print-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.print-button:active {
+  transform: scale(0.98);
+}
+
+
 /* Print Styles */
 @media print {
   .toggle-view-button,
