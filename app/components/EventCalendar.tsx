@@ -109,16 +109,39 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
               {events
                 .filter((event) => new Date(event.start) >= new Date()) // ✅ Hide past events
                 .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()) // ✅ Sort by upcoming events
-                .map((event) => (
-                  <li key={event.id} className="event-list-item">
-                    <strong>{event.title}</strong><br />
-                    📅 {new Date(event.start).toLocaleDateString()}
-                    ⏰ {new Date(event.start).toLocaleTimeString()} - {event.end ? new Date(event.end).toLocaleTimeString() : "N/A"}
-                    {event.location && <div>📍 {event.location}</div>}
-                    {event.details && <div>📝 {event.details}</div>}
-                  </li>
-                ))}
+                .map((event) => {
+                  const startDate = new Date(event.start);
+                  const endDate = event.end && new Date(event.end).toString() !== "Invalid Date" ? new Date(event.end) : null;
+
+                  return (
+                    <li key={event.id} className="event-list-item">
+                      <strong>{event.title}</strong><br />
+
+                      {/* 📅 Display Date */}
+                      <p>
+                        📅 {startDate.toLocaleDateString()}
+                        {endDate && startDate.toLocaleDateString() !== endDate.toLocaleDateString()
+                          ? ` - ${endDate.toLocaleDateString()}`
+                          : ""}
+                      </p>
+
+                      {/* ⏰ Display Time Below Date */}
+                      <p>
+                        ⏰{" "}
+                        {endDate && startDate.toLocaleDateString() === endDate.toLocaleDateString()
+                          ? `${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}`
+                          : endDate
+                            ? `${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}`
+                            : `${startDate.toLocaleTimeString()}`}
+                      </p>
+
+                      {event.location && <div>📍 {event.location}</div>}
+                      {event.details && <div>📝 {event.details}</div>}
+                    </li>
+                  );
+                })}
             </ul>
+
             {events.filter((event) => new Date(event.start) >= new Date()).length === 0 && <p>No upcoming events.</p>}
           </div>
         ) : isMobile ? (
@@ -183,14 +206,38 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
         </div>
       )}
 
-      {/* ✅ Event Details Modal */}
       {selectedEvent && (
         <div className="modal-overlay">
           <div className="modal">
             <h3 className="modal-title">{selectedEvent.title}</h3>
+
+            {/* 📅 Display Date */}
             <p className="modal-date">
-              📅 {selectedEvent.start} - {selectedEvent.end ?? "N/A"}
+              📅 {new Date(selectedEvent.start).toLocaleDateString()}
+              {selectedEvent.end &&
+                selectedEvent.end !== "N/A" &&
+                new Date(selectedEvent.end).toString() !== "Invalid Date" &&
+                new Date(selectedEvent.start).toLocaleDateString() !== new Date(selectedEvent.end).toLocaleDateString()
+                ? ` - ${new Date(selectedEvent.end).toLocaleDateString()}`
+                : ""}
             </p>
+
+            {/* ⏰ Display Time Below Date */}
+            <p className="modal-time">
+              ⏰
+              {selectedEvent.end &&
+                selectedEvent.end !== "N/A" &&
+                new Date(selectedEvent.end).toString() !== "Invalid Date" &&
+                new Date(selectedEvent.start).toLocaleDateString() === new Date(selectedEvent.end).toLocaleDateString()
+                ? `${new Date(selectedEvent.start).toLocaleTimeString()} - ${new Date(selectedEvent.end).toLocaleTimeString()}`
+                : selectedEvent.end &&
+                  selectedEvent.end !== "N/A" &&
+                  new Date(selectedEvent.end).toString() !== "Invalid Date"
+                  ? `${new Date(selectedEvent.start).toLocaleTimeString()} - ${new Date(selectedEvent.end).toLocaleTimeString()}`
+                  : `${new Date(selectedEvent.start).toLocaleTimeString()}`
+              }
+            </p>
+
             {selectedEvent.location && <p className="modal-location">📍 {selectedEvent.location}</p>}
             {selectedEvent.details && (
               <p className="modal-details">
@@ -205,6 +252,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
                 )}
               </p>
             )}
+
             <div className="modal-buttons">
               <button onClick={() => setSelectedEvent(null)} className="modal-button close">
                 Close
@@ -213,6 +261,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
