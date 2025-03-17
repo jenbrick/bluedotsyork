@@ -42,7 +42,7 @@ function AuthInner() {
     console.log("handleAuth - Started with key:", key);
     setLoading(true);
     setError(null);
-
+  
     try {
       // Validate the access key
       const response = await fetch("/api/validate-key", {
@@ -52,26 +52,27 @@ function AuthInner() {
         },
         body: JSON.stringify({ accessKey: key }),
       });
-
+  
       console.log("handleAuth - Response status:", response.status);
-
+  
       const contentType = response.headers.get("Content-Type") || "";
       if (contentType.includes("application/json")) {
         const data = await response.json();
         console.log("handleAuth - Response JSON data:", data);
-
+  
         if (data.valid) {
           console.log(
             "handleAuth - Access key is valid. Setting cookie and redirecting."
           );
+  
           // Set the cookie with the access key
           Cookies.set("accessKey", key, { expires: 1 });
-
-          console.log(
-            "handleAuth - Redirecting to /business-directory with rtkn:",
-            key
-          );
-          router.push(`/business-directory/?rtkn=${key}`);
+  
+          // Get the user's originally intended page (if any)
+          const intendedPath = searchParams.get("redirect") || "/";
+  
+          console.log("handleAuth - Redirecting to:", intendedPath);
+          router.push(`${intendedPath}?rtkn=${key}`); // Redirect to intended page
         } else {
           setError(<span>Access could not be granted.</span>);
         }
@@ -98,7 +99,7 @@ function AuthInner() {
       console.log("handleAuth - Finished.");
     }
   };
-
+  
   return (
     <div className={styles["auth-page"]}>
       <div className={styles["auth-container"]}>
