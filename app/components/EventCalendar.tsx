@@ -44,19 +44,25 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [events]);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    console.log("Rendering, isMobile:", isMobile);
-    checkMobile(); // ✅ Run on initial load
-    window.addEventListener("resize", checkMobile); // ✅ Update on resize
-  
+    const checkMobile = () => {
+      const mobileStatus = window.innerWidth <= 768;
+      setIsMobile(mobileStatus);
+    };
+
+    // Run once on mount
+    checkMobile();
+
+    // ✅ Listen for window resize
+    window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handleDateClick = (info: { dateStr: string }) => {
     setSelectedDay(info.dateStr);
+    console.log(info.dateStr);
     const filteredEvents = events.filter((event) => event.start.startsWith(info.dateStr));
     setDayEvents(filteredEvents);
   };
@@ -75,6 +81,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
   return (
     <div style={{ width: "100%" }}>
       <h1 className="calendar-title">Blue Dots Event Calendar</h1>
+      <p>Mobile status: {isMobile ? "✅ Mobile" : "❌ Desktop"}</p>
 
       {/* Toggle Button for Desktop Users */}
       {!isMobile && (
@@ -91,88 +98,67 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
       )}
 
       {/* ✅ Mobile View: Show Only Highlighted Days, Click to Reveal Events */}
-      {isMobile ? (
-  <div>
-    {/* ✅ Mobile View Toggle */}
-    <div style={{ textAlign: "center", marginBottom: "10px" }}>
-      <button className="toggle-view-button" onClick={() => setViewMode(viewMode === "calendar" ? "list" : "calendar")}>
-        {viewMode === "calendar" ? "Switch to List View" : "Switch to Calendar View"}
-      </button>
+   <div className="calendar-container">
+  {isMobile ? (
+    <FullCalendar
+      key={events.length}
+      plugins={[dayGridPlugin, interactionPlugin]}
+      initialView="dayGridMonth"
+      headerToolbar={false}
+      dayCellClassNames={(info) => {
+        const formattedDate = info.date.toISOString().split("T")[0]; // ✅ Convert to YYYY-MM-DD
+        console.log("Checking date:", formattedDate);
+      
+        const hasEvent = events.some(event => event.start.startsWith(formattedDate));
+      
+        if (hasEvent) {
+          console.log("✅ Event found on", formattedDate);
+        } else {
+          console.log("❌ No event on", formattedDate);
+        }
+      
+        return hasEvent ? "fc-day-has-event" : "";
+      }}
+      events={events.map(event => ({ ...event, display: "background" }))}
+      dateClick={handleDateClick}
+    />
+  ) : viewMode === "calendar" ? (
+    <FullCalendar
+      key={events.length}
+      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+      initialView="dayGridMonth"
+      timeZone="local"
+      headerToolbar={{
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay",
+      }}
+      events={events}
+      dateClick={isEditable ? handleDateClick : undefined}
+      eventClick={handleEventClick}
+      editable={isEditable}
+    />
+  ) : (
+    <div className="event-list-container">
+      <h3 className="event-list-title">Upcoming Events</h3>
+      <ul className="event-list">
+        {events
+          .filter((event) => new Date(event.start) >= new Date())
+          .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+          .map((event) => (
+            <li key={event.id} className="event-list-item">
+              <strong>{event.title}</strong><br />
+              📅 {new Date(event.start).toLocaleDateString()}  
+              ⏰ {new Date(event.start).toLocaleTimeString()} - {event.end ? new Date(event.end).toLocaleTimeString() : "N/A"}
+              {event.location && <div>📍 {event.location}</div>}
+              {event.details && <div>📝 {event.details}</div>}
+            </li>
+          ))}
+      </ul>
+      {events.filter((event) => new Date(event.start) >= new Date()).length === 0 && <p>No upcoming events.</p>}
     </div>
-
-    {viewMode === "calendar" ? (
-      <FullCalendar
-        key={events.length}
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        headerToolbar={false} // ✅ Hide toolbar on mobile
-        dayCellClassNames={(info) => {
-          const hasEvent = events.some(event => event.start.startsWith(info.dateStr));
-          return hasEvent ? "fc-day-has-event" : ""; // ✅ Apply class only if event exists
-        }}
-        events={events.map((event) => ({
-          ...event,
-          display: "background", // ✅ Only highlight the day
-        }))}
-        dateClick={handleDateClick} // ✅ Tap to view events for the day
-      />
-    ) : (
-      <div className="event-list-container">
-        <h3 className="event-list-title">Upcoming Events</h3>
-        <ul className="event-list">
-          {events
-            .filter((event) => new Date(event.start) >= new Date()) // ✅ Hide past events
-            .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()) // ✅ Sort by upcoming events
-            .map((event) => (
-              <li key={event.id} className="event-list-item">
-                <strong>{event.title}</strong><br />
-                📅 {new Date(event.start).toLocaleDateString()}  
-                ⏰ {new Date(event.start).toLocaleTimeString()} - {event.end ? new Date(event.end).toLocaleTimeString() : "N/A"}
-                {event.location && <div>📍 {event.location}</div>}
-                {event.details && <div>📝 {event.details}</div>}
-              </li>
-            ))}
-        </ul>
-        {events.filter((event) => new Date(event.start) >= new Date()).length === 0 && <p>No upcoming events.</p>}
-      </div>
-    )}
-  </div>
-) : viewMode === "calendar" ? (
-  <FullCalendar
-    key={events.length}
-    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-    initialView="dayGridMonth"
-    timeZone="local"
-    headerToolbar={{
-      left: "prev,next today",
-      center: "title",
-      right: "dayGridMonth,timeGridWeek,timeGridDay",
-    }}
-    events={events}
-    dateClick={isEditable || isMobile ? handleDateClick : undefined}
-    eventClick={handleEventClick}
-    editable={isEditable}
-  />
-) : (
-  <div className="event-list-container">
-    <h3 className="event-list-title">Upcoming Events</h3>
-    <ul className="event-list">
-      {events
-        .filter((event) => new Date(event.start) >= new Date()) // ✅ Hide past events
-        .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()) // ✅ Sort by upcoming events
-        .map((event) => (
-          <li key={event.id} className="event-list-item">
-            <strong>{event.title}</strong><br />
-            📅 {new Date(event.start).toLocaleDateString()}  
-            ⏰ {new Date(event.start).toLocaleTimeString()} - {event.end ? new Date(event.end).toLocaleTimeString() : "N/A"}
-            {event.location && <div>📍 {event.location}</div>}
-            {event.details && <div>📝 {event.details}</div>}
-          </li>
-        ))}
-    </ul>
-    {events.filter((event) => new Date(event.start) >= new Date()).length === 0 && <p>No upcoming events.</p>}
-  </div>
-)}
+  )}
+</div>
 
 
       {/* ✅ Show Events for Selected Day (Mobile Only) */}

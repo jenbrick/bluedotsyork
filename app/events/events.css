@@ -1,4 +1,4 @@
-/* ======== Calendar Wrapper (Full Width) ======== */
+/* ======== Calendar Wrapper (Full Width on Mobile, Max 1200px on Desktop) ======== */
 .calendar-container {
   width: 100%;
   max-width: 1200px;
@@ -63,19 +63,14 @@
 /* ✅ Force text wrapping for events in calendar blocks */
 .fc-event-title-container {
   white-space: normal !important;
-  /* Allows text wrapping */
   overflow: visible !important;
-  /* Prevents clipping */
   word-wrap: break-word !important;
-  /* Ensures words break properly */
   display: block !important;
-  /* Forces full width */
 }
 
 /* ✅ Adjust event height dynamically */
 .fc-daygrid-event {
   min-height: 30px;
-  /* Adjust based on design */
   height: auto !important;
   padding: 2px;
 }
@@ -94,17 +89,10 @@
   word-wrap: break-word !important;
 }
 
-/* ======== Fix Full Width on Smaller Screens ======== */
+/* ======== Responsive Fixes (Tablet & Mobile) ======== */
 @media screen and (max-width: 1024px) {
-
-  /* Tablets */
-  .container {
-    max-width: 900px;
-    padding: 15px;
-  }
-
   .calendar-container {
-    max-width: 900px;
+    max-width: 100%;
     padding: 10px;
   }
 
@@ -120,14 +108,6 @@
 }
 
 @media screen and (max-width: 768px) {
-
-  /* Mobile */
-  .container {
-    max-width: 100%;
-    padding: 10px;
-    margin: 20px auto;
-  }
-
   .calendar-container {
     max-width: 100%;
     padding: 5px;
@@ -135,7 +115,7 @@
 
   .fc {
     width: 100% !important;
-    min-width: 100% !important;
+    max-width: 100% !important;
     min-height: 450px;
   }
 
@@ -153,16 +133,11 @@
     display: none !important;
   }
 
-  /* ✅ Keep event-day highlighting */
-  .fc-daygrid-day.fc-day-with-event {
-    background-color: #ffeb3b !important;
-    /* Yellow highlight */
-  }
-
+  
   /* ✅ Light blue background for days with events */
   .fc-day-has-event {
-    background-color: rgba(173, 216, 230, 0.6) !important; /* Light blue with transparency */
-    border-radius: 5px; /* Optional: round corners */
+    background-color: rgba(173, 216, 230, 0.6) !important;
+    border-radius: 5px;
   }
 
   /* ✅ Ensure event text is still readable */
@@ -177,7 +152,6 @@
     border-radius: 8px;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
   }
 
   .event-list-item {
@@ -213,7 +187,7 @@
   z-index: 1000;
 }
 
-/* ======== Modal Box (Responsive) ======== */
+/* ======== Modal Box ======== */
 .modal {
   background: white;
   width: 90%;
@@ -222,21 +196,6 @@
   border-radius: 8px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   text-align: center;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-/* ======== Modal Title & Date ======== */
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.modal-date {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 20px;
 }
 
 /* ======== Modal Buttons ======== */
@@ -257,174 +216,38 @@
   width: 48%;
 }
 
-.modal-button.delete {
-  background-color: #e63946;
-  color: white;
-}
-
-.modal-button.delete:hover {
-  background-color: #d62828;
-}
-
-.modal-button.close {
-  background-color: #ddd;
-  color: black;
-}
-
-.modal-button.close:hover {
-  background-color: #ccc;
-}
-
-/* ======== Responsive Modal (Adjust for Small Screens) ======== */
-@media screen and (max-width: 768px) {
-  .modal {
-    width: 95%;
-    max-width: 400px;
-    padding: 15px;
-  }
-
-  .modal-title {
-    font-size: 1.3rem;
-  }
-
-  .modal-date {
-    font-size: 0.9rem;
-  }
-
-  .modal-button {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-}
-
-/* ======== Fade-In Animation for Modal ======== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* ======== Add Event Button ======== */
-.add-event-button {
-  display: block;
-  margin: 10px auto;
-  padding: 10px 15px;
-  font-size: 1rem;
-  font-weight: bold;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
-}
-
-.add-event-button:hover {
-  background: #218838;
-}
-
-/* ======== Modal Input Fields ======== */
-.modal-input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-/* Required field indicator */
-.required {
-  color: red;
-  font-weight: bold;
-}
-
-/* Invalid input field */
-.modal-input.invalid {
-  border: 2px solid red;
-  background-color: #ffe6e6;
-}
-
-/* Save Button - Enabled */
+/* Save Button */
 .modal-button {
   background-color: #007bff;
-  /* ✅ Nice blue */
   color: white;
-  font-weight: bold;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
 }
 
 .modal-button:hover {
   background-color: #0056b3;
-  /* ✅ Darker blue on hover */
 }
 
-/* Save Button - Disabled */
+/* Disabled Save Button */
 .modal-button:disabled {
   background-color: gray;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-/* Edit/Save Toggle Button */
-.edit-toggle-button {
-  background-color: #007bff;
-  /* ✅ Blue for edit mode */
-  color: white;
-  font-weight: bold;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
-}
-
-.edit-toggle-button:hover {
-  background-color: #0056b3;
-}
-
-.edit-toggle-button:active {
-  transform: scale(0.98);
-}
-
 /* Logout Button */
 .logout-button {
   background-color: #dc3545;
-  /* ✅ Red for logout */
   color: white;
-  font-weight: bold;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
-  margin-left: 10px;
 }
 
 .logout-button:hover {
   background-color: #c82333;
-  /* Darker red on hover */
-}
-
-.logout-button:active {
-  transform: scale(0.98);
 }
 
 /* Event List Styling */
 .event-list-container {
   text-align: left;
   max-width: 800px;
-  margin: 20px auto;
+  margin: 5px auto;
   padding: 20px;
   background: white;
   border-radius: 8px;
@@ -451,34 +274,13 @@
   border-bottom: none;
 }
 
-/* Buttons */
-.toggle-view-button,
-.print-button {
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-  transition: background 0.2s ease-in-out;
-}
-
-.toggle-view-button:hover,
-.print-button:hover {
-  background-color: #0056b3;
-}
-
 /* Print Styles */
 @media print {
-
   .toggle-view-button,
   .print-button,
   .calendar-title,
   .fc-toolbar {
     display: none;
-    /* ✅ Hide buttons and calendar header when printing */
   }
 
   .event-list-container {
