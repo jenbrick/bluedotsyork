@@ -126,18 +126,16 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
             key={events.length}
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
-            headerToolbar={false}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay",
+            }}
             dayCellClassNames={(info) => {
               const formattedDate = info.date.toISOString().split("T")[0]; // ✅ Convert to YYYY-MM-DD
               console.log("Checking date:", formattedDate);
 
               const hasEvent = events.some(event => event.start.startsWith(formattedDate));
-
-              if (hasEvent) {
-                console.log("✅ Event found on", formattedDate);
-              } else {
-                console.log("❌ No event on", formattedDate);
-              }
 
               return hasEvent ? "fc-day-has-event" : "";
             }}
