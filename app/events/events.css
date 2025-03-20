@@ -1,41 +1,70 @@
-/* ======== Calendar Wrapper (Full Width on Mobile, Max 1200px on Desktop) ======== */
+/* ======== Calendar Styling ======== */
 .calendar-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 15px;
-  background: #fafafa;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
   border-radius: 8px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-  display: block;
+  position: relative; /* Needed for absolute positioning inside */
+  height: calc(100vh - 100px); /* Adjusts to screen height, leaving space for header */
 }
 
+/* Adjust padding for mobile */
+@media screen and (max-width: 768px) {
+  .calendar-container  {
+    padding: 0px;
+  }
+}
+
+/* Calendar Title */
 .calendar-title {
   text-align: center;
   color: #0056b3;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* ======== FullCalendar Fix (Forces Full Width) ======== */
+/* ✅ Scale down title for smaller screens */
+@media screen and (max-width: 768px) {
+  .calendar-title {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .calendar-title {
+    font-size: 16px;
+  }
+}
+
+/* ======== FullCalendar Adjustments ======== */
 .fc {
+  flex-grow: 1; /* Ensures the calendar fills the remaining space */
   width: 100% !important;
-  max-width: 1200px !important;
-  min-width: 100% !important;
-  height: auto;
-  min-height: 650px;
+  height: 100% !important;
+  min-height: calc(100vh - 120px); /* Responsive to available screen height */
+  max-height: 100%;
   border-radius: 8px;
   padding: 15px;
-  background: white;
+  background: #fafafafa;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
 }
 
-/* ======== FullCalendar Toolbar & Buttons ======== */
-.fc-toolbar {
-  display: flex !important;
-  justify-content: space-between !important;
-  width: 100% !important;
+/* Ensure calendar cells use available space */
+.fc-view-container {
+  height: 100%;
 }
 
+/* Toolbar */
+.fc-toolbar {
+  margin-bottom: 10px;
+}
+
+/* Toolbar Title */
 .fc-toolbar-title {
   font-size: 22px !important;
   font-weight: bold !important;
@@ -44,6 +73,7 @@
   flex-grow: 1 !important;
 }
 
+/* Calendar Buttons */
 .fc-button {
   background: #007bff !important;
   border: none !important;
@@ -52,128 +82,99 @@
   color: white !important;
 }
 
-.fc .fc-button {
-  margin: 5px;
-}
-
 .fc-button:hover {
   background: #0056b3 !important;
 }
 
-/* ✅ Force text wrapping for events in calendar blocks */
-.fc-event-title-container {
-  white-space: normal !important;
-  overflow: visible !important;
-  word-wrap: break-word !important;
-  display: block !important;
+/* Fix Button Alignment */
+.fc .fc-button {
+  margin: 5px;
 }
 
-/* ✅ Adjust event height dynamically */
+/* ======== Floating Edit Button (Top-Right Inside Calendar) ======== */
+.floating-edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease-in-out;
+  z-index: 10; /* Ensures button stays above the calendar */
+}
+
+/* Ensure Calendar Events Don't Block the Button */
+.fc-event,
+.fc-day {
+  z-index: 1; /* Lower priority than the button */
+  pointer-events: auto; /* Allows normal interaction except where button is */
+}
+
+.floating-edit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Adjust button size for mobile */
+@media screen and (max-width: 768px) {
+  .floating-edit-button {
+    width: 40px;
+    height: 40px;
+    top: 5px;
+    right: 5px;
+  }
+}
+
+/* ======== Event Styling ======== */
+.fc-event-custom {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 2px 4px;
+  font-size: 12px;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Adjust event height dynamically */
 .fc-daygrid-event {
   min-height: 30px;
   height: auto !important;
   padding: 2px;
 }
 
-/* ✅ Prevents title text from being cut off */
-.fc-daygrid-event .fc-event-title {
+/* Prevents title text from being cut off */
+.fc-daygrid-event .fc-event-title,
+.fc-h-event .fc-event-title {
   font-size: 14px;
   line-height: 1.2;
   display: block !important;
   white-space: normal !important;
-}
-
-/* ✅ Makes sure all-day events also wrap */
-.fc-h-event .fc-event-title {
-  white-space: normal !important;
   word-wrap: break-word !important;
 }
 
-/* ======== Responsive Fixes (Tablet & Mobile) ======== */
-@media screen and (max-width: 1024px) {
-  .calendar-container {
-    max-width: 100%;
-    padding: 10px;
-  }
-
-  .fc {
-    width: 100% !important;
-    min-width: 100% !important;
-    min-height: 500px;
-  }
-
-  .fc-toolbar-title {
-    font-size: 18px !important;
-  }
+/* Light blue background for days with events */
+.fc-day-has-event {
+  background-color: rgba(173, 216, 230, 0.6) !important;
+  border-radius: 5px;
 }
 
-@media screen and (max-width: 768px) {
-  .calendar-container {
-    max-width: 100%;
-    padding: 5px;
-  }
-
-  .fc {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 450px;
-  }
-
-  .fc-toolbar-title {
-    font-size: 16px !important;
-  }
-
-  .fc-button {
-    padding: 6px 10px !important;
-    font-size: 14px !important;
-  }
-
-  /* ✅ Hide events inside calendar blocks on mobile */
-  .fc-daygrid-event {
-    display: none !important;
-  }
-
-  
-  /* ✅ Light blue background for days with events */
-  .fc-day-has-event {
-    background-color: rgba(173, 216, 230, 0.6) !important;
-    border-radius: 5px;
-  }
-
-  /* ✅ Ensure event text is still readable */
-  .fc-daygrid-day-number {
-    color: #333 !important;
-    font-weight: bold;
-  }
-
-  /* ✅ Style event list on mobile */
-  .event-list-container {
-    background: white;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .event-list-item {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .event-list-item:last-child {
-    border-bottom: none;
-  }
+/* Ensure event text is readable */
+.fc-daygrid-day-number {
+  color: #333 !important;
+  font-weight: bold;
 }
 
-/* ======== Fix Overflow Issues on Small Screens ======== */
-@media screen and (max-width: 480px) {
-  .fc {
-    overflow-x: scroll;
-    width: 100% !important;
-    min-width: 400px !important;
-  }
-}
-
-/* ======== Modal Overlay (Background) ======== */
+/* ======== Modal Styling ======== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -187,7 +188,6 @@
   z-index: 1000;
 }
 
-/* ======== Modal Box ======== */
 .modal {
   background: white;
   width: 90%;
@@ -198,7 +198,7 @@
   text-align: center;
 }
 
-/* ======== Modal Buttons ======== */
+/* Modal Buttons */
 .modal-buttons {
   display: flex;
   justify-content: space-between;
@@ -214,10 +214,6 @@
   cursor: pointer;
   transition: 0.2s ease-in-out;
   width: 48%;
-}
-
-/* Save Button */
-.modal-button {
   background-color: #007bff;
   color: white;
 }
@@ -226,7 +222,7 @@
   background-color: #0056b3;
 }
 
-/* Disabled Save Button */
+/* Disable Save Button */
 .modal-button:disabled {
   background-color: gray;
   cursor: not-allowed;
@@ -243,7 +239,7 @@
   background-color: #c82333;
 }
 
-/* Event List Styling */
+/* ======== Event List Styling ======== */
 .event-list-container {
   text-align: left;
   max-width: 800px;
@@ -274,48 +270,35 @@
   border-bottom: none;
 }
 
-/* ✅ Toggle View Button Styling */
-.toggle-view-button {
-  background-color: #007bff; /* Blue */
-  color: white;
+/* ======== Toggle & Print Buttons ======== */
+.toggle-view-button,
+.print-button {
   font-weight: bold;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin: 5px;
+  margin-right: 5px;
   transition: background 0.2s ease-in-out;
+}
+
+.toggle-view-button {
+  background-color: #007bff;
+  color: white;
 }
 
 .toggle-view-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
-.toggle-view-button:active {
-  transform: scale(0.98);
-}
-
-/* ✅ Print Button Styling */
 .print-button {
-  background-color: #28a745; /* Green */
+  background-color: #28a745;
   color: white;
-  font-weight: bold;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-  transition: background 0.2s ease-in-out;
 }
 
 .print-button:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #218838;
 }
-
-.print-button:active {
-  transform: scale(0.98);
-}
-
 
 /* Print Styles */
 @media print {
@@ -332,3 +315,100 @@
     background: white;
   }
 }
+
+/* ✅ Disable event click & hover effects on mobile */
+@media screen and (max-width: 768px) {
+  .fc-event {
+    pointer-events: none !important; /* Disable all interactions */
+    background-color: transparent !important; /* Remove background hover effect */
+    color: inherit !important; /* Prevent color changes */
+    border: none !important; /* Remove event borders */
+  }
+
+  /* ✅ Ensure event text is still visible but not interactive */
+  .fc-event-title {
+    cursor: default !important;
+  }
+}
+
+/* ✅ Click outside the modal to close */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* ✅ Ensure the modal itself doesn't close when clicking inside */
+.modal {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+}
+
+/* ✅ 'X' Close Button in the Upper Right */
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease-in-out;
+}
+
+.modal-close-button:hover {
+  color: #007bff;
+}
+
+
+/* ✅ Edit Button Styling */
+.event-edit-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.event-edit-button:hover {
+  background: #0056b3;
+}
+
+/* ✅ Align edit button inside event list */
+.modal-event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-event-item:last-child {
+  border-bottom: none;
+}
+
+.event-info {
+  flex-grow: 1;
+}
+

@@ -18,7 +18,6 @@ export default function Home() {
     <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
    {/* Breadcrumb Navigation */}
 <Breadcrumb />
-<br />
       <EventCalendar isEditable={isEditable} /> {/* ✅ Pass isEditable */}
     </div>
   );

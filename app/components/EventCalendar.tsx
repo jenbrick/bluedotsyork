@@ -8,6 +8,9 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { supabase } from "@/lib/supabaseClientGD";
 import { EventClickArg } from "@fullcalendar/core";
 
+import { FaPencilAlt } from "react-icons/fa"; // ✅ Alternative: Pencil icon
+
+
 type EventType = {
   id: string;
   title: string;
@@ -61,11 +64,18 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
   }, []);
 
   const handleDateClick = (info: { dateStr: string }) => {
-    setSelectedDay(info.dateStr);
-    console.log(info.dateStr);
     const filteredEvents = events.filter((event) => event.start.startsWith(info.dateStr));
-    setDayEvents(filteredEvents);
+
+    if (filteredEvents.length > 0) {
+      setSelectedDay(info.dateStr);
+      setDayEvents(filteredEvents);
+      setSelectedEvent(null); // Ensure event selection doesn't conflict
+    } else {
+      setSelectedDay(null);
+      setDayEvents([]);
+    }
   };
+
 
   const handleEventClick = (info: EventClickArg) => {
     setSelectedEvent({
@@ -81,27 +91,31 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
   return (
     <div style={{ width: "100%" }}>
       <h1 className="calendar-title">Blue Dots Event Calendar</h1>
-
       {/* Toggle Button for Desktop Users */}
-
-      <div style={{ textAlign: "center", marginBottom: "10px" }}>
-        <button
-          className="toggle-view-button"
-          onClick={() => setViewMode(viewMode === "calendar" ? "list" : "calendar")}
-        >
-          {viewMode === "calendar" ? "Switch to List View" : "Switch to Calendar View"}
-        </button>
-        {viewMode === "list" && (
-          <button className="print-button" onClick={() => window.print()}>
-            Print List
-          </button>
-        )}
-      </div>
 
 
 
       {/* ✅ Prioritize List View First */}
       <div className="calendar-container">
+        {/* ✅ Floating Compose Button inside the calendar */}
+        {true && (
+          <button className="floating-edit-button">
+            <FaPencilAlt size={20} />
+          </button>
+        )}
+        <div style={{ textAlign: "center", marginBottom: "10px" }}>
+          <button
+            className="toggle-view-button"
+            onClick={() => setViewMode(viewMode === "calendar" ? "list" : "calendar")}
+          >
+            {viewMode === "calendar" ? "View all Upcoming Events" : "Go to Calendar View"}
+          </button>
+          {viewMode === "list" && (
+            <button className="print-button" onClick={() => window.print()}>
+              Print List
+            </button>
+          )}
+        </div>
         {viewMode === "list" ? (
           <div className="event-list-container">
             <h3 className="event-list-title">Upcoming Events</h3>
@@ -162,8 +176,19 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
 
               return hasEvent ? "fc-day-has-event" : "";
             }}
-            events={events.map(event => ({ ...event, display: "background" }))}
+            events={events} //.map(event => ({ ...event, display: "background" }))}
             dateClick={handleDateClick}
+            eventClick={isMobile ? () => { } : handleEventClick} // Ensures no effect on mobile
+            eventContent={(eventInfo) => {
+              if (eventInfo.view.type === "dayGridMonth") {
+                return (
+                  <div className="fc-event-custom">
+                    {eventInfo.event.title}
+                  </div>
+                );
+              }
+              return undefined;
+            }}
           />
         ) : (
           <FullCalendar
@@ -174,44 +199,71 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
             headerToolbar={{
               left: "prev,next today",
               center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
+              right: "dayGridMonth,timeGridWeek",
             }}
             events={events}
-            dateClick={isEditable ? handleDateClick : undefined}
-            eventClick={handleEventClick}
+            dateClick={handleDateClick}
+            eventClick={isMobile ? () => { } : handleEventClick} // Ensures no effect on mobile
             editable={isEditable}
+            eventContent={(eventInfo) => {
+              if (eventInfo.view.type === "dayGridMonth") {
+                return (
+                  <div className="fc-event-custom">
+                    {eventInfo.event.title}
+                  </div>
+                );
+              }
+              return undefined;
+            }}
           />
         )}
       </div>
 
+      {/* ✅ Modal for Viewing All Events on a Selected Day (Mobile & Desktop) */}
+      {selectedDay && (
+        <div className="modal-overlay" onClick={() => setSelectedDay(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            {/* ✅ 'X' Close Button in Upper Right */}
+            <button className="modal-close-button" onClick={() => setSelectedDay(null)}>✖</button>
 
+            <h3 className="modal-title">Events for {selectedDay}</h3>
+            <ul className="modal-event-list">
+              {dayEvents.length > 0 ? (
+                dayEvents.map((event) => (
+                  <li key={event.id} className="modal-event-item">
+                    <div className="event-info">
+                      <strong>{event.title}</strong>
+                      <p>📅 {new Date(event.start).toLocaleDateString()}</p>
+                      <p>⏰ {new Date(event.start).toLocaleTimeString()}
+                        {event.end && ` - ${new Date(event.end).toLocaleTimeString()}`}
+                      </p>
+                      {event.location && <p>📍 {event.location}</p>}
+                      {event.details && <p>📝 {event.details}</p>}
+                    </div>
 
-      {/* ✅ Show Events for Selected Day (Mobile Only) */}
-      {isMobile && selectedDay && (
-        <div className="event-list-container">
-          <h3 className="event-list-title">Events for {selectedDay}</h3>
-          <ul className="event-list">
-            {dayEvents.length > 0 ? (
-              dayEvents.map((event) => (
-                <li key={event.id} className="event-list-item">
-                  <strong>{event.title}</strong><br />
-                  📍 {event.location || "No location"} <br />
-                  📝 {event.details || "No details"}
-                </li>
-              ))
-            ) : (
-              <p>No events on this day.</p>
-            )}
-          </ul>
+                    {/* ✅ Show Edit Button if Editable */}
+                    {true && (
+                      <button className="event-edit-button">
+                        ✏️ Edit
+                      </button>
+                    )}
+                  </li>
+                ))
+              ) : (
+                <p>No events on this day.</p>
+              )}
+            </ul>
+          </div>
         </div>
       )}
 
       {selectedEvent && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3 className="modal-title">{selectedEvent.title}</h3>
+        <div className="modal-overlay" onClick={() => setSelectedEvent(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            {/* ✅ 'X' Close Button in Upper Right */}
+            <button className="modal-close-button" onClick={() => setSelectedEvent(null)}>✖</button>
 
-            {/* 📅 Display Date */}
+            <h3 className="modal-title">{selectedEvent.title}</h3>
             <p className="modal-date">
               📅 {new Date(selectedEvent.start).toLocaleDateString()}
               {selectedEvent.end &&
@@ -222,20 +274,9 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
                 : ""}
             </p>
 
-            {/* ⏰ Display Time Below Date */}
             <p className="modal-time">
-              ⏰
-              {selectedEvent.end &&
-                selectedEvent.end !== "N/A" &&
-                new Date(selectedEvent.end).toString() !== "Invalid Date" &&
-                new Date(selectedEvent.start).toLocaleDateString() === new Date(selectedEvent.end).toLocaleDateString()
-                ? `${new Date(selectedEvent.start).toLocaleTimeString()} - ${new Date(selectedEvent.end).toLocaleTimeString()}`
-                : selectedEvent.end &&
-                  selectedEvent.end !== "N/A" &&
-                  new Date(selectedEvent.end).toString() !== "Invalid Date"
-                  ? `${new Date(selectedEvent.start).toLocaleTimeString()} - ${new Date(selectedEvent.end).toLocaleTimeString()}`
-                  : `${new Date(selectedEvent.start).toLocaleTimeString()}`
-              }
+              ⏰ {new Date(selectedEvent.start).toLocaleTimeString()}
+              {selectedEvent.end && ` - ${new Date(selectedEvent.end).toLocaleTimeString()}`}
             </p>
 
             {selectedEvent.location && <p className="modal-location">📍 {selectedEvent.location}</p>}
@@ -253,15 +294,15 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
               </p>
             )}
 
-            <div className="modal-buttons">
-              <button onClick={() => setSelectedEvent(null)} className="modal-button close">
-                Close
+            {/* ✅ Show Edit Button if Editable */}
+            {true && (
+              <button className="event-edit-button">
+                ✏️ Edit Event
               </button>
-            </div>
+            )}
           </div>
         </div>
       )}
-
     </div>
   );
 };
