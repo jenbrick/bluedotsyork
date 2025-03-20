@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { supabase } from "@/lib/supabaseClientGD";
+import { supabase } from "@/lib/supabaseClient";
 import { EventClickArg } from "@fullcalendar/core";
 
-import { FaPencilAlt } from "react-icons/fa"; // ✅ Alternative: Pencil icon
+// import { FaPencilAlt } from "react-icons/fa"; // ✅ Alternative: Pencil icon
 
 
 type EventType = {
@@ -32,11 +32,30 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"calendar" | "list">("calendar"); // Default to Calendar View
 
+  // ✅ Cache reference to prevent unnecessary re-fetching
+  const isFetched = useRef(false);
+
   useEffect(() => {
     const fetchEvents = async () => {
-      const { data, error } = await supabase.from("events").select("*");
-      if (error) console.error("Error fetching events:", error);
-      else setEvents(data as EventType[]);
+      // ✅ Check if cached data exists
+      const cachedEvents = localStorage.getItem("cachedEvents");
+
+      if (cachedEvents) {
+        setEvents(JSON.parse(cachedEvents)); // ✅ Use cached data
+      }
+
+      // ✅ Fetch only if not already fetched
+      if (!isFetched.current) {
+        console.log("fetching events")
+        const { data, error } = await supabase.from("events").select("*");
+        if (error) {
+          console.error("Error fetching events:", error);
+        } else {
+          setEvents(data as EventType[]);
+          localStorage.setItem("cachedEvents", JSON.stringify(data)); // ✅ Cache fetched data
+        }
+        isFetched.current = true;
+      }
     };
 
     fetchEvents();
@@ -47,7 +66,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, [events]);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -90,7 +109,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <h1 className="calendar-title">Blue Dots Event Calendar</h1>
+      <h1 className="calendar-title">Grey Dots Event Calendar</h1>
       {/* Toggle Button for Desktop Users */}
 
 
@@ -98,11 +117,11 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
       {/* ✅ Prioritize List View First */}
       <div className="calendar-container">
         {/* ✅ Floating Compose Button inside the calendar */}
-        {true && (
+        {/* {true && (
           <button className="floating-edit-button">
             <FaPencilAlt size={20} />
           </button>
-        )}
+        )} */}
         <div style={{ textAlign: "center", marginBottom: "10px" }}>
           <button
             className="toggle-view-button"
@@ -242,11 +261,11 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
                     </div>
 
                     {/* ✅ Show Edit Button if Editable */}
-                    {true && (
+                    {/* {true && (
                       <button className="event-edit-button">
                         ✏️ Edit
                       </button>
-                    )}
+                    )} */}
                   </li>
                 ))
               ) : (
@@ -295,11 +314,11 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
             )}
 
             {/* ✅ Show Edit Button if Editable */}
-            {true && (
+            {/* {true && (
               <button className="event-edit-button">
                 ✏️ Edit Event
               </button>
-            )}
+            )} */}
           </div>
         </div>
       )}
