@@ -5,7 +5,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClientGD";
 import { EventClickArg } from "@fullcalendar/core";
 
 // import { FaPencilAlt } from "react-icons/fa"; // ✅ Alternative: Pencil icon
@@ -109,11 +109,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({ isEditable }) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <h1 className="calendar-title">Grey Dots Event Calendar</h1>
-      {/* Toggle Button for Desktop Users */}
-
-
-
+      <h1 className="calendar-title">Blue Dots Event Calendar</h1>
       {/* ✅ Prioritize List View First */}
       <div className="calendar-container">
         {/* ✅ Floating Compose Button inside the calendar */}
